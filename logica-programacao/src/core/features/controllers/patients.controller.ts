@@ -66,4 +66,37 @@ export class PatientsController {
             return ApiResponseUtil.handleResultError(res, error);
         }
     }
+
+    @LoggerController()
+    async updatePatient(req: Request, res: Response): Promise<Response> {
+        try {
+            const {name, cpf, birthday} = req.body as {
+                name?: string;
+                cpf?: string;
+                birthday?: string;
+            };
+
+            const id: number = Number(req.params.id);
+
+            const patient: Patients = await this.patientsService.updateRegistration(
+                id,
+                name,
+                cpf,
+                birthday,
+            );
+
+            return ApiResponseUtil.success(
+                res,
+                {
+                    id: patient.id,
+                    name: patient.name,
+                    cpf: patient.cpf.toString(),
+                    birthday: patient.birthday,
+                },
+                StatusCodes.OK,
+            );
+        } catch (error) {
+            return ApiResponseUtil.handleResultError(res, error);
+        }
+    }
 }

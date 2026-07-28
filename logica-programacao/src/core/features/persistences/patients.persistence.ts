@@ -46,6 +46,22 @@ export class PatientsPersistence implements PersistenceBase<Patients, PatientRec
         });
     }
 
+    async findByCpf(cpf: string): Promise<Patients | null> {
+        const record: PatientRecord | undefined = this.store.readAll().find((patient) =>
+            patient.cpf === cpf);
+
+        if (!record) {
+            return null;
+        }
+
+        return Patients.rehydrate({
+            id: record.id,
+            name: record.name,
+            birthday: DateUtil.parse(record.birthday),
+            cpf: CpfVo.createCpf(record.cpf),
+        });
+    }
+
     async findAll(): Promise<Patients[]> {
         return this.store.readAll().map((record) => Patients.rehydrate({
             id: record.id,

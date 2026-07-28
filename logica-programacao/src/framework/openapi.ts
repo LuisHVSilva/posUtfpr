@@ -91,6 +91,85 @@ const openApiDocument = {
                 },
             },
         },
+        "/api/patients/{id}": {
+            patch: {
+                tags: ["Patients"],
+                summary: "Atualiza os dados de um paciente",
+                description:
+                    "Atualiza parcialmente o nome, CPF e/ou data de nascimento de um paciente.",
+                operationId: "updatePatient",
+                parameters: [
+                    {
+                        name: "id",
+                        in: "path",
+                        required: true,
+                        description: "Identificador do paciente",
+                        schema: {
+                            type: "integer",
+                            format: "int64",
+                            minimum: 1,
+                        },
+                        example: 1,
+                    },
+                ],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                $ref: "#/components/schemas/UpdatePatientRequest",
+                            },
+                            example: {
+                                name: "Maria da Silva Atualizada",
+                                birthday: "1991-06-15",
+                            },
+                        },
+                    },
+                },
+                responses: {
+                    "200": {
+                        description: "Dados do paciente atualizados",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    $ref: "#/components/schemas/UpdatePatientResponse",
+                                },
+                            },
+                        },
+                    },
+                    "400": {
+                        description: "Dados inválidos ou regra de negócio violada",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    $ref: "#/components/schemas/ErrorResponse",
+                                },
+                            },
+                        },
+                    },
+                    "404": {
+                        description: "Paciente não encontrado",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    $ref: "#/components/schemas/ErrorResponse",
+                                },
+                            },
+                        },
+                    },
+                    "500": {
+                        description: "Erro interno do servidor",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    $ref: "#/components/schemas/ErrorResponse",
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
     },
     components: {
         schemas: {
@@ -172,6 +251,57 @@ const openApiDocument = {
                             callNumber: 1,
                             enteredAt: "2026-07-27T15:30:00.000Z",
                         },
+                    },
+                },
+            },
+            UpdatePatientRequest: {
+                type: "object",
+                minProperties: 1,
+                properties: {
+                    name: {
+                        type: "string",
+                        minLength: 4,
+                        maxLength: 100,
+                        description: "Nome completo do paciente",
+                        example: "Maria da Silva Atualizada",
+                    },
+                    cpf: {
+                        type: "string",
+                        description: "CPF do paciente, com ou sem pontuação",
+                        example: "529.982.247-25",
+                    },
+                    birthday: {
+                        type: "string",
+                        format: "date",
+                        description: "Data de nascimento no formato YYYY-MM-DD",
+                        example: "1991-06-15",
+                    },
+                },
+            },
+            UpdatePatientResponse: {
+                type: "object",
+                required: ["success", "result"],
+                properties: {
+                    success: {
+                        type: "boolean",
+                        example: true,
+                    },
+                    result: {
+                        $ref: "#/components/schemas/PatientDetails",
+                    },
+                },
+            },
+            PatientDetails: {
+                type: "object",
+                required: ["id", "name", "cpf", "birthday"],
+                properties: {
+                    id: {type: "integer", format: "int64", example: 1},
+                    name: {type: "string", example: "MARIA DA SILVA ATUALIZADA"},
+                    cpf: {type: "string", example: "52998224725"},
+                    birthday: {
+                        type: "string",
+                        format: "date",
+                        example: "1991-06-15",
                     },
                 },
             },

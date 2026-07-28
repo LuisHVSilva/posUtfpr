@@ -18,6 +18,12 @@ function buildPatientsRouter(deps: buildPatientsRouterDeps): Router {
             controller.registerPatient(req, res))
     );
 
+    router.patch(
+        "/:id",
+        asyncHandlerMiddleware((req, res) =>
+            controller.updatePatient(req, res))
+    );
+
     return router;
 }
 

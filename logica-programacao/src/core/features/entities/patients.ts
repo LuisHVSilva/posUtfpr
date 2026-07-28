@@ -91,4 +91,16 @@ export class Patients extends EntityBase<PatientsProps> {
 
         return new Patients({name: sanitizedName, birthday, cpf: cpfVo});
     }
+
+    updateCpf(cpf: CpfVo): this {
+        return this.cloneWith({cpf});
+    }
+
+    updateName(name: string): this {
+        return this.cloneWith({name: name.trim().toUpperCase()})
+    }
+
+    updateBirthday(birthday: Date): this {
+        return this.cloneWith({birthday});
+    }
 }
