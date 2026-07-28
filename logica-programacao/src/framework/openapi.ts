@@ -19,6 +19,35 @@ const openApiDocument = {
         },
     ],
     paths: {
+        "/api/patients": {
+            get: {
+                tags: ["Patients"],
+                summary: "Lista pacientes",
+                description: "Lista pacientes com filtros opcionais. Cada página retorna no máximo 20 pacientes.",
+                operationId: "listPatients",
+                parameters: [
+                    {name: "id", in: "query", required: false, description: "Identificador do paciente", schema: {type: "integer", format: "int64", minimum: 1}, example: 1},
+                    {name: "name", in: "query", required: false, description: "Parte do nome do paciente", schema: {type: "string", minLength: 1}, example: "Maria"},
+                    {name: "cpf", in: "query", required: false, description: "CPF do paciente", schema: {type: "string", minLength: 1}, example: "52998224725"},
+                    {name: "birthday", in: "query", required: false, description: "Data de nascimento no formato YYYY-MM-DD", schema: {type: "string", format: "date"}, example: "1990-05-20"},
+                    {name: "page", in: "query", required: false, description: "Número da página", schema: {type: "integer", minimum: 1, default: 1}, example: 1},
+                ],
+                responses: {
+                    "200": {
+                        description: "Lista de pacientes retornada com paginação",
+                        content: {"application/json": {schema: {$ref: "#/components/schemas/ListPatientsResponse"}}},
+                    },
+                    "400": {
+                        description: "Filtros inválidos",
+                        content: {"application/json": {schema: {$ref: "#/components/schemas/ErrorResponse"}}},
+                    },
+                    "500": {
+                        description: "Erro interno do servidor",
+                        content: {"application/json": {schema: {$ref: "#/components/schemas/ErrorResponse"}}},
+                    },
+                },
+            },
+        },
         "/api/patients/new": {
             post: {
                 tags: ["Patients"],
@@ -289,6 +318,34 @@ const openApiDocument = {
                     result: {
                         $ref: "#/components/schemas/PatientDetails",
                     },
+                },
+            },
+            ListPatientsResponse: {
+                type: "object",
+                required: ["success", "result"],
+                properties: {
+                    success: {type: "boolean", example: true},
+                    result: {
+                        type: "object",
+                        required: ["patients", "pagination"],
+                        properties: {
+                            patients: {
+                                type: "array",
+                                items: {$ref: "#/components/schemas/PatientDetails"},
+                            },
+                            pagination: {$ref: "#/components/schemas/Pagination"},
+                        },
+                    },
+                },
+            },
+            Pagination: {
+                type: "object",
+                required: ["currentPage", "itemsPerPage", "totalItems", "totalPages"],
+                properties: {
+                    currentPage: {type: "integer", minimum: 1, example: 1},
+                    itemsPerPage: {type: "integer", minimum: 1, maximum: 20, example: 20},
+                    totalItems: {type: "integer", minimum: 0, example: 42},
+                    totalPages: {type: "integer", minimum: 0, example: 3},
                 },
             },
             PatientDetails: {

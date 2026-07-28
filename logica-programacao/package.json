@@ -19,7 +19,8 @@
     "swagger-ui-express": "^5.0.1",
     "tsconfig-paths": "^4.2.0",
     "tsx": "^4.23.1",
-    "tsyringe": "^4.10.0"
+    "tsyringe": "^4.10.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",

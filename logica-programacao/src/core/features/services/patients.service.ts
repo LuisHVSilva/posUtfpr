@@ -4,9 +4,24 @@ import {DateUtil} from "@shared/utils/date.util";
 import {PatientsPersistence} from "@features/persistences/patients.persistence";
 import {Patients} from "@features/entities/patients";
 import {CpfVo} from "@shared/valueObjects/cpf.vo";
+import {PatientFilters} from "@features/schemas/patients/patientFilters.schema";
+
+export type ListPatientsFilters = PatientFilters & {page: number};
+
+export interface ListPatientsResult {
+    patients: Patients[];
+    pagination: {
+        currentPage: number;
+        itemsPerPage: number;
+        totalItems: number;
+        totalPages: number;
+    };
+}
 
 @injectable()
 export class PatientsService {
+    private static readonly ITEMS_PER_PAGE = 20;
+
     constructor(
         @inject("PatientsPersistence")
         private patientsRepository: PatientsPersistence
@@ -59,5 +74,33 @@ export class PatientsService {
         }
 
         return await this.patientsRepository.update(updatedPatient);
+    }
+
+    async listPatients(filters: ListPatientsFilters): Promise<ListPatientsResult> {
+        const patients: Patients[] = await this.patientsRepository.findAll();
+        const filteredPatients = patients.filter((patient) => {
+            const matchesId = filters.id === undefined || patient.id === filters.id;
+            const matchesName = filters.name === undefined ||
+                patient.name.toLowerCase().includes(filters.name.toLowerCase());
+            const matchesCpf = filters.cpf === undefined || patient.cpf.toString() === filters.cpf;
+            const matchesBirthday = filters.birthday === undefined ||
+                patient.birthday.toISOString().slice(0, 10) === filters.birthday;
+
+            return matchesId && matchesName && matchesCpf && matchesBirthday;
+        });
+
+        const totalItems = filteredPatients.length;
+        const totalPages = Math.ceil(totalItems / PatientsService.ITEMS_PER_PAGE);
+        const start = (filters.page - 1) * PatientsService.ITEMS_PER_PAGE;
+
+        return {
+            patients: filteredPatients.slice(start, start + PatientsService.ITEMS_PER_PAGE),
+            pagination: {
+                currentPage: filters.page,
+                itemsPerPage: PatientsService.ITEMS_PER_PAGE,
+                totalItems,
+                totalPages,
+            },
+        };
     }
 }

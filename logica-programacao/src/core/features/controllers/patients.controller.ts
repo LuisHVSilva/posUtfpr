@@ -9,6 +9,7 @@ import {LoggerController} from "@infra/logger/decorators/loggerController";
 import {Patients} from "@features/entities/patients";
 import {PatientAttendances} from "@features/entities/patientAttendances";
 import {QueueEntry} from "@features/entities/queueEntry";
+import {parseListPatientsQuery} from "@features/schemas/patients/listPatientsQuery.schema";
 
 
 @injectable()
@@ -92,6 +93,30 @@ export class PatientsController {
                     name: patient.name,
                     cpf: patient.cpf.toString(),
                     birthday: patient.birthday,
+                },
+                StatusCodes.OK,
+            );
+        } catch (error) {
+            return ApiResponseUtil.handleResultError(res, error);
+        }
+    }
+
+    @LoggerController()
+    async listPatients(req: Request, res: Response): Promise<Response> {
+        try {
+            const filters = parseListPatientsQuery(req.query);
+            const result = await this.patientsService.listPatients(filters);
+
+            return ApiResponseUtil.success(
+                res,
+                {
+                    patients: result.patients.map((patient) => ({
+                        id: patient.id,
+                        name: patient.name,
+                        cpf: patient.cpf.toString(),
+                        birthday: patient.birthday,
+                    })),
+                    pagination: result.pagination,
                 },
                 StatusCodes.OK,
             );
