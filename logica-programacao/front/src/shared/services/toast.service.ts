@@ -1,4 +1,4 @@
-import type {ToastType} from "@shared/types/toast.type.ts";
+import type {ToastType} from "../types/toast.type.ts";
 
 type ShowToastFn = (data: { type: ToastType; message: string }) => void;
 
@@ -17,7 +17,7 @@ class ToastService {
         this.showToastRef?.({type: "error", message});
     }
 
-    errorThrow(e: any) {
+    errorThrow(e: unknown) {
         if (e instanceof Error) {
             this.error(e.message);
         }

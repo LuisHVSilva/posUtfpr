@@ -1,524 +1,437 @@
 @use "../../../shared/design-system/styles/mixins" as *;
 @use "../../../shared/design-system/styles/variables" as *;
 
-.calls-page {
-  margin-inline: auto;
-  max-width: space(container-max);
-  padding: s(xl);
-}
-
-.calls-page__header {
-  align-items: flex-start;
+.calls-display {
   display: flex;
-  gap: s(lg);
-  justify-content: space-between;
-  margin-bottom: s(xl);
-}
-
-.calls-page__header h1 {
-  color: color(primary);
-}
-
-.calls-page__header p {
-  color: color(on-surface-variant);
-  margin-top: s(xs);
-  max-width: calc(#{space(container-max)} / 2);
-}
-
-.calls-page__header .button {
-  min-width: calc(#{$control-min-height} * 3.5);
-}
-
-.patient-summary-grid {
-  display: grid;
-  gap: s(md);
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  margin-bottom: s(xl);
-}
-
-.patient-summary-card {
-  align-items: center;
-  display: flex;
-  gap: s(md);
-  min-height: calc(#{$control-min-height} * 2.45);
-  padding: s(lg);
-}
-
-.patient-summary-card__icon {
-  align-items: center;
-  background: color(primary-fixed);
-  border-radius: radius(md);
-  color: color(primary);
-  display: inline-flex;
-  flex: 0 0 calc(#{$control-min-height} + #{s(xs)});
-  height: calc(#{$control-min-height} + #{s(xs)});
-  justify-content: center;
-}
-
-.patient-summary-card__label {
-  color: color(on-surface-variant);
-  display: block;
-  @include typography(body-md);
-}
-
-.patient-summary-card strong {
-  color: color(on-surface);
-  display: block;
-  @include typography(headline-md, semibold);
-}
-
-.patient-summary-card--secondary .patient-summary-card__icon {
-  background: color(secondary-fixed);
-  color: color(secondary);
-}
-
-.patient-summary-card--danger .patient-summary-card__icon {
-  background: color(error-container);
-  color: color(error);
-}
-
-.patient-summary-card--neutral .patient-summary-card__icon {
-  background: color(tertiary-fixed);
-  color: color(tertiary);
-}
-
-.patient-table {
-  @include card-surface;
+  flex-direction: column;
+  height: 100vh;
   overflow: hidden;
 }
 
-.patient-table__header {
+.calls-topbar {
   align-items: center;
-  background: color(surface-container-low);
+  background: color(surface-container-lowest);
   border-bottom: $border-width solid color(outline-variant);
   display: flex;
   justify-content: space-between;
-  padding: s(md) s(lg);
+  min-height: calc(#{$control-min-height} + #{s(lg)});
+  padding: 0 s(xl);
 }
 
-.patient-table__header h2 {
-  color: color(on-surface);
-  @include typography(title-md, semibold);
-}
-
-.patient-table__tools {
-  display: flex;
-  gap: s(sm);
-}
-
-.patient-table__tools button,
-.patient-table__actions button,
-.calls-modal__header button,
-.calls-modal__hero button {
+.calls-topbar__left,
+.calls-topbar__actions,
+.calls-topbar__user {
   align-items: center;
-  background: transparent;
-  border-radius: radius(default);
+  display: flex;
+}
+
+.calls-topbar__left {
+  gap: s(lg);
+}
+
+.calls-topbar__left h1 {
+  color: color(primary);
+  @include typography(headline-md, bold);
+}
+
+.calls-topbar__search {
+  align-items: center;
+  background: color(surface-container-low);
+  border-radius: radius(full);
   color: color(on-surface-variant);
-  display: inline-flex;
-  justify-content: center;
-  min-height: s(xl);
-  min-width: s(xl);
+  display: flex;
+  gap: s(xs);
+  min-height: calc(#{$control-min-height} - #{s(sm)});
+  padding: 0 s(md);
+  width: calc(#{$layout-sidebar-width} * 1.25);
 }
 
-.patient-table__tools button:hover,
-.patient-table__actions button:hover,
-.calls-modal__header button:hover,
-.calls-modal__hero button:hover {
-  background: color(surface-variant);
-}
-
-.patient-table__scroll {
-  overflow-x: auto;
-}
-
-.patient-table table {
-  border-collapse: collapse;
-  min-width: calc(#{$layout-sidebar-width} * 3.5);
+.calls-topbar__search input {
+  background: transparent;
+  border: 0;
+  min-width: 0;
+  padding: 0;
   width: 100%;
 }
 
-.patient-table th {
-  background: color(surface-container-lowest);
-  border-bottom: $border-width solid color(outline-variant);
-  color: color(on-surface-variant);
-  padding: s(md) s(lg);
-  text-align: left;
-  @include typography(label-md, medium, mono);
-  text-transform: uppercase;
-}
-
-.patient-table th:last-child {
-  text-align: right;
-}
-
-.patient-table td {
-  border-bottom: $border-width solid color(outline-variant, .45);
-  color: color(on-surface);
-  padding: s(md) s(lg);
-  position: relative;
-  vertical-align: middle;
-  @include typography(body-md);
-}
-
-.patient-table__row:hover {
-  background: color(secondary-container, .05);
-}
-
-.patient-table__row td:first-child::before {
-  bottom: 0;
-  content: "";
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: s(xs);
-}
-
-.patient-table__row--emergency td:first-child::before {
-  background: color(error-strong);
-}
-
-.patient-table__row--urgent td:first-child::before {
-  background: color(warning);
-}
-
-.patient-table__row--stable td:first-child::before {
-  background: color(success);
-}
-
-.patient-table__identity {
-  align-items: center;
-  display: flex;
+.calls-topbar__actions {
   gap: s(md);
 }
 
-.patient-table__identity strong,
-.registry-list__item strong {
-  color: color(on-surface);
-  display: block;
-  @include typography(body-md, semibold);
+.calls-topbar__actions > button {
+  align-items: center;
+  background: transparent;
+  border-radius: radius(full);
+  color: color(primary);
+  display: inline-flex;
+  height: calc(#{$control-min-height} - #{s(xs)});
+  justify-content: center;
+  width: calc(#{$control-min-height} - #{s(xs)});
 }
 
-.patient-table__identity span:not(.patient-table__avatar),
-.registry-list__item span {
+.calls-topbar__actions > button:hover {
+  background: color(secondary-container, .05);
+}
+
+.calls-topbar__user {
+  border-left: $border-width solid color(outline-variant);
+  gap: s(sm);
+  margin-left: s(md);
+  padding-left: s(lg);
+}
+
+.calls-topbar__user div:first-child {
+  text-align: right;
+}
+
+.calls-topbar__user strong {
+  color: color(primary);
+  display: block;
+  @include typography(title-md, semibold);
+}
+
+.calls-topbar__user span {
   color: color(on-surface-variant);
   display: block;
   @include typography(caption);
 }
 
-.patient-table__avatar {
+.calls-topbar__avatar {
   align-items: center;
   background: color(primary-fixed);
-  border-radius: radius(default);
+  border: calc(#{$border-width} * 2) solid color(primary-container);
+  border-radius: radius(lg);
   color: color(primary);
-  display: inline-flex;
-  flex: 0 0 s(xl);
-  height: s(xl);
+  display: flex;
+  height: calc(#{$control-min-height} - #{s(xs)});
   justify-content: center;
-  @include typography(caption, bold);
+  width: calc(#{$control-min-height} - #{s(xs)});
+  @include typography(caption, bold, mono);
 }
 
-.patient-table__row--urgent .patient-table__avatar {
-  background: color(secondary-fixed);
-  color: color(secondary);
+.calls-display__canvas {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: s(md);
+  min-height: 0;
+  overflow: hidden;
+  padding: s(md);
 }
 
-.patient-table__row--stable .patient-table__avatar {
-  background: color(tertiary-fixed);
-  color: color(tertiary);
+.calls-alert {
+  align-items: center;
+  animation: calls-alert-blink 1.5s infinite;
+  background: color(error);
+  border-radius: radius(lg);
+  color: color(on-error);
+  display: flex;
+  justify-content: space-between;
+  min-height: $control-min-height;
+  padding: s(sm) s(lg);
 }
 
-.patient-table__mono {
-  @include typography(label-md, medium, mono);
+.calls-alert div {
+  align-items: center;
+  display: flex;
+  gap: s(sm);
 }
 
-.patient-table__status {
-  border-radius: radius(default);
-  display: inline-flex;
-  padding: s(xs) s(sm);
-  @include typography(label-md, bold, mono);
+.calls-alert strong {
+  @include typography(title-md, bold);
+  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
-.patient-table__status--emergency {
-  background: color(error-container);
-  color: color(on-error-container);
+.calls-alert span {
+  @include typography(label-md, bold, mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
-.patient-table__status--urgent {
-  background: color(warning-container);
-  color: color(warning);
+.calls-display__panels {
+  display: grid;
+  flex: 1;
+  gap: s(md);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-height: 0;
+  overflow: hidden;
 }
 
-.patient-table__status--stable {
-  background: color(success-container);
-  color: color(success);
-}
-
-.patient-table__actions {
-  display: flex;
-  gap: s(sm);
-  justify-content: flex-end;
-  opacity: 0;
-  transition: opacity $transition-fast;
-}
-
-.patient-table__row:hover .patient-table__actions,
-.patient-table__actions:focus-within {
-  opacity: 1;
-}
-
-.patient-table__footer {
-  align-items: center;
-  background: color(surface-container-lowest, .45);
-  border-top: $border-width solid color(outline-variant);
-  display: flex;
-  justify-content: space-between;
-  padding: s(md) s(lg);
-}
-
-.patient-table__footer p {
-  color: color(on-surface-variant);
-  @include typography(body-md);
-}
-
-.patient-table__footer > div {
-  display: flex;
-  gap: s(sm);
-}
-
-.patient-table__footer .button {
-  border: $border-width solid color(outline-variant);
-  min-height: calc(#{$control-min-height} - #{s(md)});
-  padding: s(xs) s(md);
-}
-
-.calls-modal {
-  align-items: flex-start;
-  background: color(on-background, .4);
-  backdrop-filter: blur(4px);
-  display: flex;
-  inset: 0;
-  justify-content: center;
-  padding: s(3xl) s(md) s(md);
-  position: fixed;
-  z-index: 10;
-}
-
-.calls-modal__content {
+.call-panel {
   @include card-surface;
-  box-shadow: $shadow-modal;
   display: flex;
   flex-direction: column;
-  max-height: calc(100vh - #{s(3xl)} * 2);
-  max-width: calc(#{$modal-max-width} * 1.35);
-  overflow: hidden;
-  width: 100%;
+  min-height: 0;
 }
 
-.calls-modal__content--compact {
-  max-width: $modal-max-width;
-}
-
-.calls-modal__hero {
+.call-panel__header {
   align-items: center;
-  background: color(primary);
+  background: color(primary-container);
   color: color(on-primary);
   display: flex;
   justify-content: space-between;
   padding: s(lg) s(xl);
 }
 
-.calls-modal__hero h2 {
-  @include typography(headline-md, semibold);
+.call-panel--attendance .call-panel__header {
+  background: color(secondary);
 }
 
-.calls-modal__hero p {
-  color: color(on-primary, .8);
-  @include typography(body-md);
+.call-panel__header h2 {
+  @include typography(display-lg, bold);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
-.calls-modal__hero button {
-  color: color(on-primary);
+.call-panel__header > span {
+  font-size: font-size(display-lg) !important;
 }
 
-.calls-modal__hero button:hover {
-  background: color(on-primary, .1);
-}
-
-.calls-modal__tabs {
-  border-bottom: $border-width solid color(outline-variant);
+.call-panel__body {
   display: flex;
-  padding-inline: s(xl);
-}
-
-.calls-modal__tabs button {
-  background: transparent;
-  border-bottom: calc(#{$border-width} * 4) solid color(primary, 0);
-  color: color(on-surface-variant);
-  padding: s(md) s(lg);
-  @include typography(title-md, semibold);
-}
-
-.calls-modal__tabs button.is-active {
-  border-color: color(primary);
-  color: color(primary);
-}
-
-.registry-list {
-  display: grid;
-  gap: s(md);
-  overflow-y: auto;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
   padding: s(xl);
 }
 
-.registry-list__item {
-  align-items: center;
-  border: $border-width solid color(outline-variant);
+.call-panel__current {
+  background: color(primary-fixed-dim, .2);
+  border: calc(#{$border-width} * 2) solid color(primary);
   border-radius: radius(xl);
+  margin-bottom: s(lg);
+  padding: s(xl);
+  text-align: center;
+}
+
+.call-panel--attendance .call-panel__current {
+  background: color(secondary-fixed, .3);
+  border-color: color(secondary);
+}
+
+.call-panel__current span {
+  color: color(on-surface);
+  display: block;
+  @include typography(label-md, medium, mono);
+  letter-spacing: 0.05em;
+  margin-bottom: s(sm);
+  text-transform: uppercase;
+}
+
+.call-panel__current strong {
+  color: color(primary);
+  display: block;
+  font-family: font(body);
+  font-size: calc(#{font-size(display-lg)} * 2.4);
+  font-weight: font-weight(bold);
+  line-height: 1;
+  margin-bottom: s(md);
+}
+
+.call-panel--attendance .call-panel__current strong {
+  color: color(secondary);
+}
+
+.call-panel__current p {
+  align-items: center;
+  color: color(primary);
+  display: flex;
+  gap: s(md);
+  justify-content: center;
+  @include typography(headline-lg, bold);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.call-panel--attendance .call-panel__current p {
+  color: color(secondary);
+}
+
+.call-panel__history {
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.call-panel__history h3 {
+  border-bottom: calc(#{$border-width} * 2) solid color(outline-variant);
+  color: color(on-surface);
+  margin-bottom: s(md);
+  padding-bottom: s(xs);
+  @include typography(label-md, medium, mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.call-panel__history > div {
+  display: grid;
+  gap: s(sm);
+}
+
+.call-panel__history article {
+  align-items: center;
+  background: color(surface-container-low);
+  border: $border-width solid color(outline-variant);
+  border-radius: radius(lg);
   display: flex;
   justify-content: space-between;
   padding: s(md);
 }
 
-.registry-list__item:hover {
-  background: color(surface-container-low);
+.call-panel__history strong {
+  color: color(primary);
+  @include typography(headline-md, semibold);
 }
 
-.registry-list__item > div {
+.call-panel--attendance .call-panel__history strong {
+  color: color(secondary);
+}
+
+.call-panel__history span {
+  color: color(on-surface);
+  @include typography(title-md, semibold);
+  text-transform: uppercase;
+}
+
+.calls-stats-bar {
   align-items: center;
-  display: flex;
-  gap: s(md);
-}
-
-.registry-list__item > div > span {
-  color: color(primary-container);
-}
-
-.registry-list__item .button {
-  opacity: 0;
-}
-
-.registry-list__item:hover .button,
-.registry-list__item .button:focus-visible {
-  opacity: 1;
-}
-
-.calls-modal__footer {
-  background: color(surface-container-lowest, .45);
-  border-top: $border-width solid color(outline-variant);
-  display: flex;
-  justify-content: flex-end;
-  padding: s(md) s(xl);
-}
-
-.calls-modal__header {
-  align-items: center;
-  border-bottom: $border-width solid color(outline-variant);
+  background: color(surface-container-high);
+  border: $border-width solid color(outline-variant);
+  border-radius: radius(xl);
   display: flex;
   justify-content: space-between;
-  padding: s(md) s(lg);
+  min-height: calc(#{$control-min-height} + #{s(xl)});
+  padding: 0 s(lg);
 }
 
-.calls-modal__header h2 {
+.calls-stats-bar__items {
+  display: flex;
+  gap: s(xl);
+}
+
+.calls-stats-bar__item {
+  align-items: center;
+  display: flex;
+  gap: s(sm);
+}
+
+.calls-stats-bar__item > span {
+  border-radius: radius(full);
+  display: block;
+  height: calc(#{$control-min-height} + #{s(xs)});
+  width: s(sm);
+}
+
+.calls-stats-bar__item--emergency > span {
+  background: color(error-strong);
+}
+
+.calls-stats-bar__item--urgent > span {
+  background: color(warning);
+}
+
+.calls-stats-bar__item--stable > span {
+  background: color(success);
+}
+
+.calls-stats-bar p {
+  color: color(on-surface);
+  @include typography(label-md, medium, mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.calls-stats-bar strong {
   color: color(primary);
   @include typography(title-md, semibold);
 }
 
-.edit-patient-form {
-  display: grid;
-  gap: s(lg);
-  padding: s(xl);
+.calls-stats-bar__clock {
+  text-align: right;
 }
 
-.edit-patient-form label {
-  color: color(on-surface-variant);
-  display: grid;
-  gap: s(xs);
-  @include typography(label-md, medium, mono);
+.calls-stats-bar__clock strong {
+  display: block;
+  @include typography(headline-md, bold, mono);
 }
 
-.edit-patient-form input {
-  min-height: $control-min-height;
-  padding: s(sm) s(md);
-  width: 100%;
-}
+@keyframes calls-alert-blink {
+  0%, 100% {
+    opacity: 1;
+  }
 
-.edit-patient-form__grid {
-  display: grid;
-  gap: s(md);
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.edit-patient-form footer {
-  border-top: $border-width solid color(outline-variant);
-  display: grid;
-  gap: s(md);
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  padding-top: s(lg);
-}
-
-.edit-patient-form footer .button--ghost {
-  border: $border-width solid color(primary);
-  color: color(primary);
+  50% {
+    opacity: .84;
+  }
 }
 
 @include respond-max(tablet) {
-  .patient-summary-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .calls-display {
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+  }
+
+  .calls-display__canvas {
+    overflow: visible;
+  }
+
+  .calls-display__panels {
+    grid-template-columns: 1fr;
+    overflow: visible;
+  }
+
+  .call-panel {
+    min-height: calc(#{$card-min-height} * 1.8);
   }
 }
 
 @include respond-max(mobile) {
-  .calls-page {
-    padding: 0;
-  }
-
-  .calls-page__header {
-    flex-direction: column;
-  }
-
-  .calls-page__header .button,
-  .edit-patient-form footer .button {
-    width: 100%;
-  }
-
-  .patient-summary-grid,
-  .edit-patient-form__grid,
-  .edit-patient-form footer {
-    grid-template-columns: 1fr;
-  }
-
-  .patient-table__header,
-  .patient-table__footer,
-  .registry-list__item {
+  .calls-topbar {
     align-items: flex-start;
     flex-direction: column;
     gap: s(md);
+    padding: s(md);
   }
 
-  .patient-table__footer > div,
-  .patient-table__footer .button,
-  .registry-list__item .button {
+  .calls-topbar__left,
+  .calls-topbar__actions,
+  .calls-alert,
+  .calls-stats-bar,
+  .calls-stats-bar__items {
+    align-items: stretch;
+    flex-direction: column;
     width: 100%;
   }
 
-  .calls-modal {
-    padding-top: s(md);
+  .calls-topbar__search {
+    width: 100%;
   }
 
-  .calls-modal__content {
-    max-height: calc(100vh - #{s(md)} * 2);
+  .calls-topbar__user {
+    border-left: 0;
+    margin-left: 0;
+    padding-left: 0;
   }
 
-  .calls-modal__hero,
-  .calls-modal__tabs,
-  .registry-list,
-  .calls-modal__footer,
-  .edit-patient-form {
-    padding-inline: s(lg);
+  .call-panel__header,
+  .call-panel__body {
+    padding: s(lg);
   }
 
-  .calls-modal__tabs {
-    overflow-x: auto;
+  .call-panel__header h2 {
+    @include typography(headline-lg, bold);
+  }
+
+  .call-panel__current strong {
+    font-size: calc(#{font-size(display-lg)} * 1.6);
+  }
+
+  .call-panel__current p {
+    @include typography(headline-md, bold);
+  }
+
+  .calls-stats-bar__clock {
+    text-align: left;
   }
 }

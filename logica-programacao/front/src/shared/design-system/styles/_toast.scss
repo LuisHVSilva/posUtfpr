@@ -1,5 +1,5 @@
-@use '../base/mixins' as *;
-@use '../base/variables' as *;
+@use './mixins' as *;
+@use './variables' as *;
 
 .toast-container {
   position: fixed;
@@ -13,7 +13,7 @@
   button {
     background-color: transparent;
     border: none;
-    margin-left: s(2);
+    margin-left: s(sm);
   }
 }
 
@@ -21,7 +21,7 @@
   min-width: 280px;
   padding: 14px 18px;
   border-radius: 8px;
-  color: color(contrast);
+  color: color(surface-container-highest);
   font-weight: 500;
   display: flex;
   justify-content: space-between;
@@ -29,12 +29,29 @@
   animation: slideIn 0.3s ease;
 }
 
-.toast--success { background: color(right); }
-.toast--error   { background: color(error); }
-.toast--warning { background: color(warning); }
-.toast--info    { background: color(info); }
+.toast--success {
+  background: color(success);
+}
+
+.toast--error {
+  background: color(error);
+}
+
+.toast--warning {
+  background: color(warning);
+}
+
+.toast--info {
+  background: color(secondary-container);
+}
 
 @keyframes slideIn {
-  from { transform: translateX(100%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }

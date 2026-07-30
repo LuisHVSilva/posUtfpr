@@ -34,6 +34,10 @@ export class PatientStatusVo extends VoBase<PatientStatusEnum> {
         return this.value === PatientStatusEnum.QUEUE;
     }
 
+    isTreatment(): boolean {
+        return this.value === PatientStatusEnum.TREATMENT;
+    }
+
     isCompleted(): boolean {
         return this.value === PatientStatusEnum.COMPLETED;
     }

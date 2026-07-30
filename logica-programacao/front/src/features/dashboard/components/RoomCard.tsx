@@ -4,11 +4,12 @@ import {Icon} from "../../../shared/components/Icon/Icon";
 import type {Room} from "../types/dashboard.types";
 import "../styles/dashboard.scss";
 
-type RoomCardProps = { room: Room; onFinish: (roomId: number) => void };
+type RoomCardProps = { room: Room, onStartFinishAttendance: (room: Room) => void };
 const statusLabels = {active: "ABERTO", emergency: "CRÍTICO", closed: "FECHADO"};
 
-export function RoomCard({room, onFinish}: RoomCardProps) {
+export function RoomCard({room, onStartFinishAttendance}: RoomCardProps) {
     const isClosed = room.status === "closed";
+
     return (
         <Card className={`room-card room-card--${room.status}`}>
             <div className="room-card__bar"/>
@@ -39,12 +40,16 @@ export function RoomCard({room, onFinish}: RoomCardProps) {
                 }
             </div>
             <footer className="room-card__footer">
-                <Button disabled={isClosed}
+                {room.ticket && (
+                    <Button
+                        disabled={isClosed}
                         variant={room.status === "emergency" ? "danger" : "neutral"}
                         fullWidth
                         icon={<Icon name={isClosed ? "lock" : "check"}/>}
-                        onClick={() => onFinish(room.id)}>{isClosed ? "Abrir Sala" : "Finalizar Atendimento"}
-                </Button>
+                        onClick={() => onStartFinishAttendance(room)}>{"Finalizar Atendimento"}
+                    </Button>
+                )}
+
             </footer>
         </Card>
     );

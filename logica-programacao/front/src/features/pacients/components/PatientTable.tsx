@@ -1,6 +1,6 @@
 import {Button} from "../../../shared/components/Button/Button";
 import {Icon} from "../../../shared/components/Icon/Icon";
-import type {PatientRecord, PatientStatus} from "../types/pacients.types";
+import type {PatientRecord, PatientsPagination, PatientStatus} from "../types/pacients.types";
 import "../styles/pacients.scss";
 
 const statusLabels: Record<PatientStatus, string> = {
@@ -11,10 +11,13 @@ const statusLabels: Record<PatientStatus, string> = {
 
 type PatientTableProps = {
     patients: PatientRecord[];
+    pagination: PatientsPagination;
     onEdit: (patient: PatientRecord) => void;
 };
 
-export function PatientTable({patients, onEdit}: PatientTableProps) {
+export function PatientTable({patients, pagination, onEdit}: PatientTableProps) {
+    const displayedPatients = patients.length;
+
     return (
         <section className="patient-table" aria-labelledby="patient-table-title">
             <header className="patient-table__header">
@@ -77,10 +80,10 @@ export function PatientTable({patients, onEdit}: PatientTableProps) {
             </div>
 
             <footer className="patient-table__footer">
-                <p>Exibindo 3 de 1.284 pacientes</p>
+                <p>Exibindo {displayedPatients} de {pagination.totalItems} pacientes</p>
                 <div>
-                    <Button variant="ghost">Anterior</Button>
-                    <Button variant="ghost">Proximo</Button>
+                    <Button variant="ghost" disabled={pagination.currentPage <= 1}>Anterior</Button>
+                    <Button variant="ghost" disabled={pagination.currentPage >= pagination.totalPages}>Proximo</Button>
                 </div>
             </footer>
         </section>

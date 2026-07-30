@@ -1,3 +1,10 @@
+export class Errors extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = "ServiceError";
+    }
+}
+
 export class ServiceError extends Error {
     constructor(message: string) {
         super(message);
@@ -5,31 +12,27 @@ export class ServiceError extends Error {
     }
 }
 
-export class ConflictError extends ServiceError {
+export class ConflictError extends Errors {
     constructor(message: string) {
         super(message);
         this.name = "ConflictError";
     }
 }
 
-export class NotFoundError extends ServiceError {
-    constructor(message: string) {
-        super(message);
-        this.name = "NotFoundError";
-    }
-}
-
-export class ValidationError extends ServiceError {
+export class ValidationError extends Errors {
     constructor(message: string) {
         super(message);
         this.name = "ValidationError";
     }
 }
 
-export class NullFieldError extends ServiceError {
-    constructor(message: string) {
+export class AppError extends Error {
+    status?: number;
+    details?: unknown;
+
+    constructor(message: string, status?: number, details?: unknown) {
         super(message);
-        this.name = "NullFieldError";
+        this.status = status;
+        this.details = details;
     }
 }
-

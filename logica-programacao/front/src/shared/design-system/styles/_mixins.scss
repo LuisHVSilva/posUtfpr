@@ -1,0 +1,108 @@
+@use "sass:map";
+@use "variables" as *;
+
+@function color($key, $opacity: 1) {
+  $value: map.get($colors, $key);
+  @if $value == null {
+    @error "Color `#{$key}` not found in $colors.";
+  }
+  @if $opacity == 1 {
+    @return $value;
+  }
+  @return rgba($value, $opacity);
+}
+
+@function font($key) {
+  $value: map.get($fonts, $key);
+  @if $value == null {
+    @error "Font `#{$key}` not found in $fonts.";
+  }
+  @return $value;
+}
+
+@function font-size($key) {
+  @return map.get($font-sizes, $key);
+}
+
+@function font-weight($key) {
+  @return map.get($font-weights, $key);
+}
+
+@function line-height($key) {
+  @return map.get($line-heights, $key);
+}
+
+@function space($key) {
+  $value: map.get($spacing, $key);
+  @if $value == null {
+    @error "Spacing token `#{$key}` not found in $spacing.";
+  }
+  @return $value;
+}
+
+// Short alias retained for the same calling style used in the reference app.
+@function s($key) {
+  @return space($key);
+}
+
+@function radius($key: default) {
+  $value: map.get($radius, $key);
+  @if $value == null {
+    @error "Radius token `#{$key}` not found in $radius.";
+  }
+  @return $value;
+}
+
+@function border-radius($key: default) {
+  @return radius($key);
+}
+
+@mixin type($size, $weight: regular, $family: body) {
+  font-family: font($family);
+  font-size: font-size($size);
+  font-weight: font-weight($weight);
+  line-height: line-height($size);
+}
+
+@mixin typography($size: body-md, $weight: regular, $family: body) {
+  @include type($size, $weight, $family);
+}
+
+@mixin card-surface {
+  background: color(surface-container-lowest);
+  border: $border-width solid color(outline-variant);
+  border-radius: radius(lg);
+  box-shadow: $shadow-card;
+}
+
+@mixin focus-ring {
+  border: $focus-border-width solid color(primary-action);
+  box-shadow: $focus-shadow;
+  outline: none;
+}
+
+@mixin respond($breakpoint) {
+  $value: map.get($breakpoints, $breakpoint);
+  @if $value == null {
+    @error "Breakpoint `#{$breakpoint}` not found in $breakpoints.";
+  }
+  @media (min-width: $value) {
+    @content;
+  }
+}
+
+@mixin respond-max($breakpoint) {
+  $value: map.get($breakpoints, $breakpoint);
+  @if $value == null {
+    @error "Breakpoint `#{$breakpoint}` not found in $breakpoints.";
+  }
+  @media (max-width: $value) {
+    @content;
+  }
+}
+
+@mixin desktop-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: space(md);
+}

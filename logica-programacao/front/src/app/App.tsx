@@ -1,8 +1,7 @@
-function App() {
+import {AppRouter} from "./router";
 
-    return (
-        <><h1>Olá mundo</h1></>
-    )
+function App() {
+  return AppRouter.render();
 }
 
-export default App
+export default App;

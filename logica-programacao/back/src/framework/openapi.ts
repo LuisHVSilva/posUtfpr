@@ -12,6 +12,7 @@ const openApiDocument = {
             description: "Ambiente local",
         },
     ],
+    /* rooms tag is declared below with the other top-level tags */
     tags: [
         {
             name: "Patients",
@@ -21,7 +22,19 @@ const openApiDocument = {
             name: "Queue",
             description: "Operações automáticas das filas e salas",
         },
+        {
+            name: "Rooms",
+            description: "Room operations",
+        },
     ],
+    /*
+    tagsRooms: [
+        {
+            name: "Rooms",
+            description: "Operações relacionadas às salas de atendimento",
+        },
+    ],
+    */
     paths: {
         "/api/patients": {
             get: {
@@ -51,13 +64,10 @@ const openApiDocument = {
                     },
                 },
             },
-        },
-        "/api/patients/new": {
             post: {
                 tags: ["Patients"],
-                summary: "Cadastra um paciente e o coloca na fila correta",
-                description:
-                    "Pacientes comuns entram na fila de triagem. Pacientes emergenciais entram diretamente na fila de tratamento.",
+                summary: "Cadastra um paciente",
+                description: "Cria apenas o cadastro do paciente, sem criar atendimento ou entrada em fila.",
                 operationId: "registerPatient",
                 requestBody: {
                     required: true,
@@ -70,8 +80,6 @@ const openApiDocument = {
                                 name: "Maria da Silva",
                                 cpf: "52998224725",
                                 birthday: "1990-05-20",
-                                symptoms: "Dor intensa no peito",
-                                isEmergency: false,
                             },
                         },
                     },
@@ -120,6 +128,24 @@ const openApiDocument = {
                                 },
                             },
                         },
+                    },
+                },
+            },
+        },
+        "/api/patients/summary": {
+            get: {
+                tags: ["Patients"],
+                summary: "Consulta o resumo de pacientes",
+                description: "Retorna total de cadastros, atendimentos do dia, casos criticos em aberto e pacientes aguardando triagem.",
+                operationId: "getPatientsSummary",
+                responses: {
+                    "200": {
+                        description: "Resumo de pacientes retornado com sucesso",
+                        content: {"application/json": {schema: {$ref: "#/components/schemas/PatientsSummaryResponse"}}},
+                    },
+                    "500": {
+                        description: "Erro interno do servidor",
+                        content: {"application/json": {schema: {$ref: "#/components/schemas/ErrorResponse"}}},
                     },
                 },
             },
@@ -245,18 +271,19 @@ const openApiDocument = {
                 },
             },
         },
-        "/api/queue/triage/{attendanceId}/finish": {
+        "/api/queue/triage/{roomId}/finish": {
             patch: {
                 tags: ["Queue"],
-                summary: "Finaliza a triagem e chama o próximo paciente",
+                summary: "Finaliza a triagem pela sala e chama o próximo paciente",
                 description:
-                    "Finaliza a triagem, libera a sala e chama automaticamente o próximo paciente da fila de triagem.",
+                    "Finaliza a triagem ativa na sala informada, libera a sala e chama automaticamente o próximo paciente da fila de triagem.",
                 operationId: "finishTriage",
                 parameters: [
                     {
-                        name: "attendanceId",
+                        name: "roomId",
                         in: "path",
                         required: true,
+                        description: "Identificador da sala de triagem",
                         schema: {type: "integer", format: "int64", minimum: 1},
                         example: 1,
                     },
@@ -280,12 +307,30 @@ const openApiDocument = {
                         },
                     },
                     "400": {
-                        description: "Atendimento inválido ou não ativo em triagem",
+                        description: "Sala inválida, sem atendimento ativo em triagem ou atendimento não finalizável",
                         content: {"application/json": {schema: {$ref: "#/components/schemas/ErrorResponse"}}},
                     },
                     "404": {
-                        description: "Atendimento, médico ou sala não encontrados",
+                        description: "Sala, atendimento ou médico não encontrados",
                         content: {"application/json": {schema: {$ref: "#/components/schemas/ErrorResponse"}}},
+                    },
+                    "500": {
+                        description: "Erro interno do servidor",
+                        content: {"application/json": {schema: {$ref: "#/components/schemas/ErrorResponse"}}},
+                    },
+                },
+            },
+        },
+        "/api/rooms/infos": {
+            get: {
+                tags: ["Rooms"],
+                summary: "Consulta o resumo operacional das salas",
+                description: "Retorna salas ativas, pacientes aguardando, tempo médio do atendimento completo e emergências em atendimento.",
+                operationId: "getRoomsSummary",
+                responses: {
+                    "200": {
+                        description: "Resumo operacional retornado com sucesso",
+                        content: {"application/json": {schema: {$ref: "#/components/schemas/RoomsSummaryResponse"}}},
                     },
                     "500": {
                         description: "Erro interno do servidor",
@@ -299,7 +344,7 @@ const openApiDocument = {
         schemas: {
             RegisterPatientRequest: {
                 type: "object",
-                required: ["name", "cpf", "birthday", "symptoms", "isEmergency"],
+                required: ["name", "cpf", "birthday"],
                 properties: {
                     name: {
                         type: "string",
@@ -319,18 +364,6 @@ const openApiDocument = {
                         description: "Data de nascimento no formato YYYY-MM-DD",
                         example: "1990-05-20",
                     },
-                    symptoms: {
-                        type: "string",
-                        minLength: 1,
-                        description: "Descrição dos sintomas informados",
-                        example: "Dor intensa no peito",
-                    },
-                    isEmergency: {
-                        type: "boolean",
-                        description:
-                            "Indica se o paciente deve pular a triagem e entrar diretamente na fila de tratamento",
-                        example: false,
-                    },
                 },
             },
             RegisterPatientResponse: {
@@ -343,16 +376,15 @@ const openApiDocument = {
                     },
                     result: {
                         type: "object",
-                        required: ["patient", "attendance", "queue"],
+                        required: ["id", "name", "cpf", "birthday"],
                         properties: {
-                            patient: {
-                                $ref: "#/components/schemas/PatientSummary",
-                            },
-                            attendance: {
-                                $ref: "#/components/schemas/AttendanceSummary",
-                            },
-                            queue: {
-                                $ref: "#/components/schemas/QueueLocation",
+                            id: {type: "integer", format: "int64", example: 1},
+                            name: {type: "string", example: "MARIA DA SILVA"},
+                            cpf: {type: "string", example: "52998224725"},
+                            birthday: {
+                                type: "string",
+                                format: "date-time",
+                                example: "1990-05-20T03:00:00.000Z",
                             },
                         },
                     },
@@ -360,21 +392,10 @@ const openApiDocument = {
                 example: {
                     success: true,
                     result: {
-                        patient: {
-                            id: 1,
-                            name: "MARIA DA SILVA",
-                            cpf: "52998224725",
-                        },
-                        attendance: {
-                            id: 1,
-                            status: "QUEUE",
-                            priority: null,
-                        },
-                        queue: {
-                            type: "TRIAGE",
-                            callNumber: 1,
-                            enteredAt: "2026-07-27T15:30:00.000Z",
-                        },
+                        id: 1,
+                        name: "MARIA DA SILVA",
+                        cpf: "52998224725",
+                        birthday: "1990-05-20T03:00:00.000Z",
                     },
                 },
             },
@@ -426,11 +447,61 @@ const openApiDocument = {
                         properties: {
                             patients: {
                                 type: "array",
-                                items: {$ref: "#/components/schemas/PatientDetails"},
+                                items: {$ref: "#/components/schemas/PatientListDetails"},
                             },
                             pagination: {$ref: "#/components/schemas/Pagination"},
                         },
                     },
+                },
+            },
+            PatientsSummaryResponse: {
+                type: "object",
+                required: ["success", "result"],
+                properties: {
+                    success: {type: "boolean", example: true},
+                    result: {
+                        type: "object",
+                        required: ["totalRecords", "attendancesToday", "criticalCases", "waitingTriage"],
+                        properties: {
+                            totalRecords: {type: "integer", minimum: 0, example: 1284},
+                            attendancesToday: {type: "integer", minimum: 0, example: 42},
+                            criticalCases: {type: "integer", minimum: 0, example: 5},
+                            waitingTriage: {type: "integer", minimum: 0, example: 12},
+                        },
+                    },
+                },
+            },
+            RoomsSummaryResponse: {
+                type: "object",
+                required: ["success", "result"],
+                properties: {
+                    success: {type: "boolean", example: true},
+                    result: {
+                        type: "object",
+                        required: ["activeRooms", "waitingPatients", "averageWait", "emergencies", "rooms"],
+                        properties: {
+                            activeRooms: {type: "integer", minimum: 0, example: 5},
+                            waitingPatients: {type: "integer", minimum: 0, example: 2},
+                            averageWait: {type: "string", example: "35.5 min"},
+                            emergencies: {type: "integer", minimum: 0, example: 1},
+                            rooms: {
+                                type: "array",
+                                items: {$ref: "#/components/schemas/DashboardRoom"},
+                            },
+                        },
+                    },
+                },
+            },
+            DashboardRoom: {
+                type: "object",
+                required: ["id", "name", "specialty", "status"],
+                properties: {
+                    id: {type: "integer", minimum: 1, example: 1},
+                    name: {type: "string", example: "ConsultÃ³rio 01"},
+                    specialty: {type: "string", example: "Triagem"},
+                    status: {type: "string", enum: ["active", "emergency", "closed"], example: "active"},
+                    ticket: {type: "string", example: "T-001"},
+                    patient: {type: "string", example: "Maria da Silva"},
                 },
             },
             Pagination: {
@@ -454,6 +525,25 @@ const openApiDocument = {
                         type: "string",
                         format: "date",
                         example: "1991-06-15",
+                    },
+                },
+            },
+            PatientListDetails: {
+                type: "object",
+                required: ["id", "name", "cpf", "birthday", "status"],
+                properties: {
+                    id: {type: "integer", format: "int64", example: 1},
+                    name: {type: "string", example: "MARIA DA SILVA"},
+                    cpf: {type: "string", example: "52998224725"},
+                    birthday: {
+                        type: "string",
+                        format: "date-time",
+                        example: "1991-06-15T03:00:00.000Z",
+                    },
+                    status: {
+                        type: "string",
+                        enum: ["emergency", "urgent", "stable"],
+                        example: "urgent",
                     },
                 },
             },

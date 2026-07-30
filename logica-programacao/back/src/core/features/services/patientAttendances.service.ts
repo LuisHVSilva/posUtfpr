@@ -41,10 +41,36 @@ export class PatientAttendancesService {
         return this.patientAttendancesPersistence.findByPk(attendanceId);
     }
 
-    async finishTriage(attendanceId: number, priority: PriorityVo): Promise<{
+    /**
+     * Calcula o tempo médio do atendimento completo, da chegada até a saída.
+     * Atendimentos ainda em andamento não entram na média.
+     */
+    async getAverageWait(): Promise<string> {
+        const completedAttendances = (await this.patientAttendancesPersistence.findAll())
+            .filter((attendance) =>
+                attendance.status.isCompleted() && attendance.treatmentFinishedAt,
+            );
+
+        if (completedAttendances.length === 0) {
+            return "0 min";
+        }
+
+        const totalMilliseconds = completedAttendances.reduce(
+            (total, attendance) =>
+                total + (attendance.treatmentFinishedAt!.getTime() - attendance.arrivalAt.getTime()),
+            0,
+        );
+        const averageMinutes = totalMilliseconds / completedAttendances.length / 60000;
+
+        return `${Number(averageMinutes.toFixed(1))} min`;
+    }
+
+    async finishTriage(roomId: number, priority: PriorityVo): Promise<{
         attendance: PatientAttendances;
         nextPatient: ActiveQueueEntry | null
     }> {
+        const activeEntry = await this.queueAttendanceService.findActiveTriageEntryByRoomId(roomId);
+        const attendanceId = activeEntry.attendanceId;
         const attendance: PatientAttendances | null = await this.patientAttendancesPersistence.findByPk(attendanceId);
 
         if (!attendance) {
@@ -52,13 +78,31 @@ export class PatientAttendancesService {
         }
 
         const updatedAttendance: PatientAttendances = attendance.finalizeTriage(priority);
-        const savedAttendance: PatientAttendances =
-            await this.patientAttendancesPersistence.update(updatedAttendance);
+        const savedAttendance: PatientAttendances = await this.patientAttendancesPersistence.update(updatedAttendance);
+        const nextPatient: ActiveQueueEntry | null = await this.queueAttendanceService.finalizeTriage(attendanceId);
+        await this.queueAttendanceService.enqueue(savedAttendance);
 
-        // Depois de salvar o novo status, a fila remove o atendimento atual
-        // e tenta preencher a mesma sala com o próximo paciente da triagem.
-        const nextPatient: ActiveQueueEntry | null =
-            await this.queueAttendanceService.finalizeTriage(attendanceId);
+        return {
+            attendance: await this.patientAttendancesPersistence.findByPk(attendanceId) ?? savedAttendance,
+            nextPatient,
+        };
+    }
+
+    async finishAttendance(roomId: number): Promise<{
+        attendance: PatientAttendances;
+        nextPatient: ActiveQueueEntry | null
+    }> {
+        const activeEntry = await this.queueAttendanceService.findActiveTreatmentEntryByRoomId(roomId);
+        const attendanceId = activeEntry.attendanceId;
+        const attendance: PatientAttendances | null = await this.patientAttendancesPersistence.findByPk(attendanceId);
+
+        if (!attendance) {
+            throw new NotFoundError(`Attendance ${attendanceId} does not exist`);
+        }
+
+        const updatedAttendance: PatientAttendances = attendance.finalizeTreatment();
+        const savedAttendance: PatientAttendances = await this.patientAttendancesPersistence.update(updatedAttendance);
+        const nextPatient: ActiveQueueEntry | null = await this.queueAttendanceService.finalizeAttendance(attendanceId);
 
         return {
             attendance: savedAttendance,

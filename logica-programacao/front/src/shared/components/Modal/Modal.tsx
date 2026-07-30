@@ -1,4 +1,4 @@
-import type {FormEvent, ReactNode} from "react";
+import type {ReactNode} from "react";
 import {Icon} from "../Icon/Icon";
 import "./Modal.scss";
 
@@ -6,17 +6,17 @@ type ModalProps = {
     open: boolean;
     title: string;
     onClose: () => void;
-    onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+    action: (formData: FormData) => void;
     children: ReactNode
 };
 
-export function Modal({open, title, onClose, onSubmit, children}: ModalProps) {
+export function Modal({open, title, onClose, action, children}: ModalProps) {
     if (!open) return null;
     return (
         <div className="modal" role="presentation" onMouseDown={(event) => {
             if (event.target === event.currentTarget) onClose();
         }}>
-            <form className="modal__content" onSubmit={onSubmit}>
+            <form className="modal__content" action={action}>
                 <header className="modal__header">
                     <h2><Icon name="add"/>{title}</h2>
 

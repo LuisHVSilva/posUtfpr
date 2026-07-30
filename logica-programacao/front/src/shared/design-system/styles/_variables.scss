@@ -1,0 +1,143 @@
+/* ========================================================================
+   Public Health Integrity — design tokens
+   ======================================================================== */
+
+/* Color roles are kept as hex values so they can be consumed directly by
+   components and exported as CSS custom properties by the global layer. */
+$colors: (
+        "surface": #f9f9ff,
+        "surface-dim": #cfdaf1,
+        "surface-bright": #f9f9ff,
+        "surface-container-lowest": #ffffff,
+        "surface-container-low": #f0f3ff,
+        "surface-container": #e7eeff,
+        "surface-container-high": #dee8ff,
+        "surface-container-highest": #d8e3fa,
+        "on-surface": #111c2c,
+        "on-surface-variant": #414750,
+        "inverse-surface": #263142,
+        "inverse-on-surface": #ebf1ff,
+        "outline": #727781,
+        "outline-variant": #c1c7d2,
+        "surface-tint": #1961a1,
+        "primary": #003e6f,
+        "primary-action": #005696,
+        "on-primary": #ffffff,
+        "primary-container": #005696,
+        "primary-fixed": #d2e4ff,
+        "primary-fixed-dim": #a1c9ff,
+        "on-primary-container": #a5cbff,
+        "on-primary-fixed": #001c37,
+        "on-primary-fixed-variant": #004880,
+        "inverse-primary": #a1c9ff,
+        "secondary": #00658d,
+        "secondary-action": #00aeef,
+        "on-secondary": #ffffff,
+        "secondary-container": #2dbcfe,
+        "secondary-fixed": #c6e7ff,
+        "secondary-fixed-dim": #82cfff,
+        "on-secondary-container": #004866,
+        "on-secondary-fixed": #001e2d,
+        "on-secondary-fixed-variant": #004c6b,
+        "tertiary": #383e40,
+        "tertiary-fixed": #dee3e6,
+        "on-tertiary": #ffffff,
+        "tertiary-container": #4f5558,
+        "on-tertiary-container": #c4c9cc,
+        "error": #ba1a1a,
+        "error-strong": #d32f2f,
+        "on-error": #ffffff,
+        "error-container": #ffdad6,
+        "on-error-container": #93000a,
+        "warning": #f6c344,
+        "warning-container": #fff4cc,
+        "success": #2e7d32,
+        "success-container": #d9f2dc,
+        "background": #f2f7fa,
+        "on-background": #111c2c,
+        "surface-variant": #d8e3fa,
+        "white": #ffffff,
+        "transparent": transparent
+);
+
+$fonts: (
+        body: ("Public Sans", sans-serif),
+        mono: ("JetBrains Mono", monospace)
+);
+
+$font-sizes: (
+        display-lg: 40px,
+        headline-lg: 32px,
+        headline-lg-mobile: 24px,
+        headline-md: 24px,
+        title-md: 18px,
+        body-lg: 16px,
+        body-md: 14px,
+        label-md: 12px,
+        caption: 12px
+);
+
+$font-weights: (
+        regular: 400,
+        medium: 500,
+        semibold: 600,
+        bold: 700
+);
+
+$line-heights: (
+        display-lg: 48px,
+        headline-lg: 40px,
+        headline-lg-mobile: 32px,
+        headline-md: 32px,
+        title-md: 24px,
+        body-lg: 24px,
+        body-md: 20px,
+        label-md: 16px,
+        caption: 16px
+);
+
+$spacing: (
+        base: 4px,
+        xs: 4px,
+        sm: 8px,
+        md: 16px,
+        lg: 24px,
+        xl: 32px,
+        2xl: 48px,
+        3xl: 64px,
+        container-max: 1440px,
+        gutter: 16px,
+        margin-mobile: 16px,
+        margin-desktop: 32px,
+        content-padding: 2rem
+);
+
+$radius: (
+        sm: 0.125rem,
+        default: 0.25rem,
+        md: 0.375rem,
+        lg: 0.5rem,
+        xl: 0.75rem,
+        full: 9999px
+);
+
+$breakpoints: (
+        mobile: 37.5em,
+        tablet: 64em,
+        desktop: 64.0625em
+);
+
+$layout-sidebar-width: 16em;
+$layout-sidebar-tablet-width: 13.5em;
+$card-min-height: 18.25em;
+$card-bar-height: 0.25em;
+$control-min-height: 2.75em;
+$modal-max-width: 45em;
+$border-width: 0.0625rem;
+$focus-border-width: 0.125rem;
+$transition-fast: 160ms ease;
+$transition-standard: 220ms ease;
+$shadow-modal: 0 8px 24px rgba(0, 62, 111, 0.10);
+$shadow-card: 0 1px 2px rgba(0, 62, 111, 0.04);
+$shadow-card-hover: 0 8px 20px rgba(0, 62, 111, 0.10);
+$focus-shadow: 0 0 0 3px rgba(0, 86, 150, 0.16);

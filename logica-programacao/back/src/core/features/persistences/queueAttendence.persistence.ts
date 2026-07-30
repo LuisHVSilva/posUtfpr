@@ -14,7 +14,7 @@ interface QueueEntryRecord {
     attendanceId: number;
     patientId: number;
     callNumber: number;
-    queueType: QueueEntryTypeVo;
+    queueType: string;
     priority?: string;
     enteredAt: string;
 }
@@ -25,14 +25,14 @@ interface ActiveQueueEntryRecord {
     patientId: number;
     callNumber: number;
     doctorId: number;
-    queueType: QueueEntryTypeVo;
+    queueType: string;
     startedAt: string;
 }
 
 interface QueueAttendanceRecord {
     id: number;
     date: string;
-    type: QueueEntryTypeVo;
+    type: string;
     nextCallNumber: number;
     waiting: QueueEntryRecord[];
     active: ActiveQueueEntryRecord[];
@@ -108,7 +108,7 @@ export class QueueAttendancePersistence
         return QueueAttendance.rehydrate({
             id: record.id,
             date: DateUtil.parse(record.date),
-            type: record.type,
+            type: QueueEntryTypeVo.fromPersistence(record.type),
             nextCallNumber: record.nextCallNumber,
             waiting: record.waiting.map((entry) => this.toQueueEntry(entry)),
             active: record.active.map((entry) => this.toActiveEntry(entry)),
@@ -123,7 +123,7 @@ export class QueueAttendancePersistence
             attendanceId: record.attendanceId,
             patientId: record.patientId,
             callNumber: record.callNumber,
-            queueType: record.queueType,
+            queueType: QueueEntryTypeVo.fromPersistence(record.queueType),
             priority: record.priority
                 ? PriorityVo.fromPersistence(record.priority)
                 : undefined,
@@ -138,7 +138,7 @@ export class QueueAttendancePersistence
             patientId: record.patientId,
             callNumber: record.callNumber,
             doctorId: record.doctorId,
-            queueType: record.queueType,
+            queueType: QueueEntryTypeVo.fromPersistence(record.queueType),
             startedAt: DateUtil.parse(record.startedAt),
         });
     }
@@ -147,14 +147,14 @@ export class QueueAttendancePersistence
         return {
             id: queue.id as number,
             date: queue.date.toISOString(),
-            type: queue.type,
+            type: queue.type.toString(),
             nextCallNumber: queue.nextCallNumber,
             waiting: queue.waiting.map((entry) => ({
                 id: entry.id,
                 attendanceId: entry.attendanceId,
                 patientId: entry.patientId,
                 callNumber: entry.callNumber,
-                queueType: entry.queueType,
+                queueType: entry.queueType.toString(),
                 priority: entry.priority?.toString(),
                 enteredAt: entry.enteredAt.toISOString(),
             })),
@@ -164,7 +164,7 @@ export class QueueAttendancePersistence
                 patientId: entry.patientId,
                 callNumber: entry.callNumber,
                 doctorId: entry.doctorId,
-                queueType: entry.queueType,
+                queueType: entry.queueType.toString(),
                 startedAt: entry.startedAt.toISOString(),
             })),
             maxActiveCalls: queue.maxActiveCalls,

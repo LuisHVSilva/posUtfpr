@@ -1,7 +1,6 @@
 import axios, {HttpStatusCode} from "axios";
-import type {HttpResponseErrorType} from "../../shared/types/httpResponse.type.ts";
-import {ConflictError, ValidationError} from "../../shared/errors/service.error.ts";
-import {AppError} from "../../shared/errors/app.error.ts";
+import type {HttpResponseErrorType} from "../shared/types/httpResponse.type.ts";
+import {AppError, ConflictError, ValidationError} from "../shared/errors/errors.ts";
 
 export const DEFAULT_ERROR_MESSAGE = "Erro. Por favor, tente novamente.";
 

@@ -1,6 +1,6 @@
 import {VoBase} from "@shared/base/vo.base";
 
-export enum Priority {
+export enum PriorityEnum {
     EMERGENCY = "EMERGENCY",
     VERY_URGENT = "VERY_URGENT",
     URGENT = "URGENT",
@@ -8,35 +8,51 @@ export enum Priority {
     NOT_URGENT = "NOT_URGENT",
 }
 
-export class PriorityVo extends VoBase<Priority> {
-    public static readonly EMERGENCY: PriorityVo = new PriorityVo(Priority.EMERGENCY);
-    public static readonly VERY_URGENT: PriorityVo = new PriorityVo(Priority.VERY_URGENT);
-    public static readonly URGENT: PriorityVo = new PriorityVo(Priority.URGENT);
-    public static readonly LESS_URGENT: PriorityVo = new PriorityVo(Priority.LESS_URGENT);
-    public static readonly NOT_URGENT: PriorityVo = new PriorityVo(Priority.NOT_URGENT);
+export class PriorityVo extends VoBase<PriorityEnum> {
+    public static readonly EMERGENCY: PriorityVo = new PriorityVo(PriorityEnum.EMERGENCY);
+    public static readonly VERY_URGENT: PriorityVo = new PriorityVo(PriorityEnum.VERY_URGENT);
+    public static readonly URGENT: PriorityVo = new PriorityVo(PriorityEnum.URGENT);
+    public static readonly LESS_URGENT: PriorityVo = new PriorityVo(PriorityEnum.LESS_URGENT);
+    public static readonly NOT_URGENT: PriorityVo = new PriorityVo(PriorityEnum.NOT_URGENT);
 
-    private static readonly WEIGHTS: Record<Priority, number> = {
-        [Priority.EMERGENCY]: 1,
-        [Priority.VERY_URGENT]: 2,
-        [Priority.URGENT]: 3,
-        [Priority.LESS_URGENT]: 4,
-        [Priority.NOT_URGENT]: 5,
+    private static readonly ptBrMap: Record<PriorityEnum, string> = {
+        [PriorityEnum.EMERGENCY]: "Emergência",
+        [PriorityEnum.VERY_URGENT]: "Muito urgente",
+        [PriorityEnum.URGENT]: "Urgente",
+        [PriorityEnum.LESS_URGENT]: "Pouco urgente",
+        [PriorityEnum.NOT_URGENT]: "Sem urgência",
+    }
+
+
+    private static readonly WEIGHTS: Record<PriorityEnum, number> = {
+        [PriorityEnum.EMERGENCY]: 1,
+        [PriorityEnum.VERY_URGENT]: 2,
+        [PriorityEnum.URGENT]: 3,
+        [PriorityEnum.LESS_URGENT]: 4,
+        [PriorityEnum.NOT_URGENT]: 5,
     };
 
-    private constructor(value: Priority) {
+    private constructor(value: PriorityEnum) {
         super(value);
     }
 
+    static getMetadata() {
+        return Object.values(PriorityEnum).map(triage => ({
+            key: triage,
+            label: this.ptBrMap[triage],
+        }));
+    }
+
     static create(value: string): PriorityVo {
-        this.assertIn<Priority>(value, Object.values(Priority), "priority");
+        this.assertIn<PriorityEnum>(value, Object.values(PriorityEnum), "PriorityEnum");
 
         return new PriorityVo(value);
     }
 
     static fromPersistence(value: string): PriorityVo {
-        this.assertIn<Priority>(value, Object.values(Priority), "priority");
+        this.assertIn<PriorityEnum>(value, Object.values(PriorityEnum), "PriorityEnum");
 
-        return new PriorityVo(value as Priority);
+        return new PriorityVo(value as PriorityEnum);
     }
 
     get weight(): number {
@@ -44,7 +60,7 @@ export class PriorityVo extends VoBase<Priority> {
     }
 
     isEmergency(): boolean {
-        return this.value === Priority.EMERGENCY;
+        return this.value === PriorityEnum.EMERGENCY;
     }
 
     isHigherThan(other: PriorityVo): boolean {

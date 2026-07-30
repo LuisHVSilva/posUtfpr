@@ -12,6 +12,13 @@ function buildQueueRouter(deps: buildPatientsRouterDeps): Router {
     } = deps;
     const router: Router = Router();
 
+    router.get(
+        "/calls",
+        asyncHandlerMiddleware((req, res) =>
+            controller.callsDisplay(req, res),
+        ),
+    );
+
     router.post(
         "/attendance",
         asyncHandlerMiddleware((req, res) =>
@@ -20,9 +27,16 @@ function buildQueueRouter(deps: buildPatientsRouterDeps): Router {
     );
 
     router.patch(
-        "/triage/:attendanceId/finish",
+        "/triage/:roomId/finish",
         asyncHandlerMiddleware((req, res) =>
             controller.finishTriage(req, res),
+        ),
+    );
+
+    router.patch(
+        "/attendance/:roomId/finish",
+        asyncHandlerMiddleware((req, res) =>
+            controller.finishAttendance(req, res),
         ),
     );
 

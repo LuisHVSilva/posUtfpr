@@ -1,5 +1,5 @@
 import {HttpStatusCode} from "axios";
-import {ServiceError} from "../errors/service.error.ts";
+import {ServiceError} from "../shared/errors/errors.ts";
 
 const DEFAULT_ERROR_MESSAGE = "Erro. Por favor, tente novamente.";
 

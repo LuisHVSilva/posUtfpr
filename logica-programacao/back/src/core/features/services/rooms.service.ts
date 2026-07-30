@@ -16,14 +16,14 @@ export class RoomsService {
     ) {
     }
 
-    async findByDoctorId(doctorId: number): Promise<{room: Rooms; doctor: Doctor}> {
+    async findByDoctorId(doctorId: number): Promise<{ room: Rooms; doctor: Doctor }> {
         const doctor = await this.doctorsPersistence.findByPk(doctorId);
 
         if (!doctor || !doctor.roomId || !doctor.status.isWorking()) {
             throw new BusinessRuleError("Doctor is not assigned to an active room");
         }
 
-        const room = await this.roomsPersistence.findByPk(doctor.roomId);
+        const room: Rooms | null = await this.roomsPersistence.findByPk(doctor.roomId);
 
         if (!room) {
             throw new NotFoundError(`Room ${doctor.roomId} does not exist`);
@@ -32,7 +32,38 @@ export class RoomsService {
         return {room, doctor};
     }
 
-    async findAvailable(type: RoomTypeVo): Promise<Array<{room: Rooms; doctor: Doctor}>> {
+    async findByRoomId(roomId: number): Promise<{ room: Rooms; doctor: Doctor }> {
+        const room: Rooms | null = await this.roomsPersistence.findByPk(roomId);
+
+        if (!room) {
+            throw new NotFoundError(`Room ${roomId} does not exist`);
+        }
+
+        const doctor = (await this.doctorsPersistence.findAll()).find((candidate) =>
+            candidate.roomId === room.id && candidate.status.isWorking(),
+        );
+
+        if (!doctor) {
+            throw new BusinessRuleError("Room does not have a working doctor assigned");
+        }
+
+        return {room, doctor};
+    }
+
+    async findActives(): Promise<{ rooms: Rooms[], totalActives: number, totalInactives: number }> {
+        const rooms: Rooms[] = await this.roomsPersistence.findAll();
+
+        const totalActives: number = rooms.filter(r => r.isActive).length;
+        const totalInactives: number = rooms.filter(r => !r.isActive).length;
+
+        return {
+            rooms,
+            totalActives,
+            totalInactives
+        }
+    }
+
+    async findAvailable(type: RoomTypeVo): Promise<Array<{ room: Rooms; doctor: Doctor }>> {
         const rooms = await this.roomsPersistence.findAll();
         const doctors = await this.doctorsPersistence.findAll();
 
@@ -49,7 +80,7 @@ export class RoomsService {
 
                 return doctor ? {room, doctor} : undefined;
             })
-            .filter((item): item is {room: Rooms; doctor: Doctor} => item !== undefined);
+            .filter((item): item is { room: Rooms; doctor: Doctor } => item !== undefined);
     }
 
     async clear(room: Rooms): Promise<Rooms> {

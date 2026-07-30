@@ -7,6 +7,7 @@ import type {
     PatientRecord,
     PatientsSummaryResponse,
     PatientSummary,
+    RegisterPatientRequest,
     UpdatePatientRequest
 } from "../types/pacients.types";
 
@@ -36,6 +37,11 @@ export class PacientsService {
 
     async updatePatient(id: number, payload: UpdatePatientRequest): Promise<void> {
         const {data} = await httpBase.patch(PatientsUrl.update(id), payload);
+        assertApiSuccess(data);
+    }
+
+    async registerPatient(payload: RegisterPatientRequest): Promise<void> {
+        const {data} = await httpBase.post(PatientsUrl.list, payload);
         assertApiSuccess(data);
     }
 

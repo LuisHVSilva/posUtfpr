@@ -1,3 +1,7 @@
 @use "../../design-system/styles/mixins" as *;
 
-.card { overflow: hidden; }
+.card {
+  overflow: hidden;
+  border: 2px solid color(surface-container-highest);
+  border-radius: s(sm);
+}

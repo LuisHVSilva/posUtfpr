@@ -166,10 +166,8 @@ export class QueueAttendance extends EntityBase<QueueAttendanceProps> {
     }
 
     private validateEntryType(entry: QueueEntry): void {
-        if (entry.queueType !== this.type) {
-            throw new ValidationError(
-                "Queue entry type must match the attendance queue type",
-            );
+        if (entry.queueType.toString() !== this.type.toString()) {
+            throw new ValidationError("Queue entry type must match the attendance queue type");
         }
     }
 

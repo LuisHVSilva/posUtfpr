@@ -1,35 +1,25 @@
-const userBase = "auth";
-const fileUrlBase = "media";
-const identityBase = "identity";
+const rooms = "rooms";
+const queue = "queue";
+const metadata = "metadata";
+const patients = "patients";
 
-export const AuthUrl = {
-    login: `/${userBase}/login`,
-    registerUser: `/${userBase}/register`,
+export const RoomsUrl = {
+    summary: `/${rooms}/summary`,
 }
 
-export const FileUrl = {
-    uploadBatch: `/${fileUrlBase}/upload-batch`,
-    feed: `/${fileUrlBase}/feed`,
-    tags: `/${fileUrlBase}/tags`,
-    feedUpdates: `/${fileUrlBase}/feed-updates`,
-    like: `/${fileUrlBase}/like`,
-    comment: `/${fileUrlBase}/comment`,
-    comments: (mediaId: number) => `/${fileUrlBase}/${mediaId}/comments`,
-    download: (mediaId: number) => `/${fileUrlBase}/${mediaId}/download`,
-    feedImage: (mediaId: number) => `/${fileUrlBase}/${mediaId}/feed-image`,
-    reportUnavailable: (mediaId: number) => `/${fileUrlBase}/${mediaId}/report-unavailable`,
-    feedPoster: (mediaId: number) => `/${fileUrlBase}/${mediaId}/feed-poster`,
-    feedVideo: (mediaId: number) => `/${fileUrlBase}/${mediaId}/feed-video`,
-    uploadStatus: (uploadId: number) => `/${fileUrlBase}/uploads/${uploadId}/status`,
+export const QueueUrl = {
+    queue: `/${queue}/attendance`,
+    calls: `/${queue}/calls`,
+    finishTriage: (roomId: string) => `/${queue}/triage/${roomId}/finish`,
+    finishAttendance: (roomId: string) => `/${queue}/attendance/${roomId}/finish`,
 }
 
-export const IdentityUrl = {
-    register: `/${identityBase}/register`,
-    login: `/${identityBase}/login`,
-    passwordReset: `/${identityBase}/password-reset`,
-    refresh: `/${identityBase}/refresh`,
-    logout: `/${identityBase}/logout`,
-    me: `/${identityBase}/me`,
-    changeEmail: `/${identityBase}/email/change`,
-    changePassword: `/${identityBase}/password`,
+export const MetadataUrl = {
+    priorities: `/${metadata}/priorities`,
+}
+
+export const PatientsUrl = {
+    list: `/${patients}`,
+    summary: `/${patients}/summary`,
+    update: (id: number) => `/${patients}/${id}`,
 }

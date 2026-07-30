@@ -4,6 +4,7 @@
 .dashboard-page {
   margin-inline: auto;
   max-width: space(container-max);
+  padding: s(xl);
 }
 
 .dashboard-page__header {
@@ -35,7 +36,8 @@
   box-shadow: $shadow-card;
   min-height: 6.125rem;
   padding: s(lg);
-  border: 2px color(surface-container-lowest);
+  border: 2px solid color(surface-container-highest);
+  border-radius: s(sm);
 }
 
 .summary-card__label {
@@ -220,18 +222,47 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.form-grid label, .modal__body > label {
-  color: color(on-surface);
+.form-grid__area {
   display: grid;
-  gap: s(xs);
-  @include typography(title-md, semibold);
+  gap: s(sm);
+  margin-bottom: s(sm);
 }
 
-.form-grid input, .modal__body textarea {
-  min-height: $control-min-height;
-  padding: s(md);
-  width: 100%;
+.form-grid__hint {
+  color: color(on-surface-variant);
+  @include typography(caption);
 }
+
+.form-grid__area input:disabled {
+  background: color(surface-container-low);
+  border-color: color(outline-variant);
+  color: color(on-surface-variant);
+  cursor: not-allowed;
+  opacity: .72;
+}
+
+.form-grid__area-checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+//
+//.form-grid label, .modal__body > label {
+//  color: color(on-surface);
+//  display: grid;
+//  gap: s(xs);
+//  @include typography(title-md, semibold);
+//}
+//
+//.modal__body > label> input {
+//  background: red;
+////}
+//
+//.form-grid input, .modal__body textarea {
+//  min-height: $control-min-height;
+//  padding: s(md);
+//  width: 100%;
+//}
 
 .checkbox-field {
   align-items: center;

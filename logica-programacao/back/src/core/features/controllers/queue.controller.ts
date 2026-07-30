@@ -1,9 +1,8 @@
 import type {Request, Response} from "express";
 import {inject, injectable} from "tsyringe";
 import {LoggerController} from "@infra/logger/decorators/loggerController";
-import {Priority} from "@shared/valueObjects/triagePriority.vo";
-import {PatientAttendancesService} from "@features/services/patientAttendances.service";
 import {PriorityVo} from "@shared/valueObjects/triagePriority.vo";
+import {PatientAttendancesService} from "@features/services/patientAttendances.service";
 import {ApiResponseUtil} from "@shared/utils/apiResponse.util";
 import {StatusCodes} from "http-status-codes";
 import {PatientsService} from "@features/services/patients.service";
@@ -21,6 +20,17 @@ export class QueueController {
         @inject("QueueAttendanceService")
         private readonly queueAttendanceService: QueueAttendanceService,
     ) {
+    }
+
+    @LoggerController()
+    async callsDisplay(_req: Request, res: Response): Promise<Response> {
+        try {
+            const result = await this.queueAttendanceService.getCallsDisplay();
+
+            return ApiResponseUtil.success(res, result, StatusCodes.OK);
+        } catch (error) {
+            return ApiResponseUtil.handleResultError(res, error);
+        }
     }
 
     /**
@@ -99,13 +109,26 @@ export class QueueController {
     @LoggerController()
     async finishTriage(req: Request, res: Response): Promise<Response> {
         try {
-            const attendanceId: number = Number(req.params.attendanceId);
-            const {priority} = req.body as { priority: Priority };
+            const roomId: number = Number(req.params.roomId);
+            const {priority} = req.body as { priority: string };
 
             const result = await this.patientAttendancesService.finishTriage(
-                attendanceId,
+                roomId,
                 PriorityVo.create(priority),
             );
+
+            return ApiResponseUtil.success(res, result, StatusCodes.OK);
+
+        } catch (error) {
+            return ApiResponseUtil.handleResultError(res, error);
+        }
+    }
+
+    @LoggerController()
+    async finishAttendance(req: Request, res: Response): Promise<Response> {
+        try {
+            const roomId: number = Number(req.params.roomId);
+            const result = await this.patientAttendancesService.finishAttendance(roomId);
 
             return ApiResponseUtil.success(res, result, StatusCodes.OK);
 

@@ -8,6 +8,7 @@ import {PatientSummaryCard} from "../components/PatientSummaryCard";
 import {PatientTable} from "../components/PatientTable";
 import {usePacientsData} from "../hooks/usePacientsData";
 import type {PatientRecord} from "../types/pacients.types";
+import {queryClient} from "../../../shared/services/queryClient.service";
 import "../styles/pacients.scss";
 
 export function PacientsPage() {
@@ -22,6 +23,10 @@ export function PacientsPage() {
     const openEditModal = (patient?: PatientRecord) => {
         setSelectedPatient(patient ?? data.patients[0]);
         setRegistryOpen(false);
+    };
+
+    const handlePatientSaved = async () => {
+        await queryClient.invalidateQueries({queryKey: ["pacientsPageData"]});
     };
 
     return (
@@ -39,19 +44,19 @@ export function PacientsPage() {
                     {data.summary.map((item) => <PatientSummaryCard key={item.label} {...item}/>)}
                 </section>
 
-                <PatientTable patients={data.patients} onEdit={openEditModal}/>
+                <PatientTable patients={data.patients} pagination={data.pagination} onEdit={openEditModal}/>
             </div>
 
             <PatientRegistryModal
                 open={registryOpen}
-                records={data.registry}
                 onClose={() => setRegistryOpen(false)}
-                onSelect={openEditModal}
+                onSaved={handlePatientSaved}
             />
             <EditPatientModal
                 open={selectedPatient !== null}
                 patient={selectedPatient}
                 onClose={() => setSelectedPatient(null)}
+                onSaved={handlePatientSaved}
             />
         </AdminLayout>
     );

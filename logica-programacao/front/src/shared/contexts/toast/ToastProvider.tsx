@@ -1,8 +1,9 @@
 import {useState, type ReactNode, useEffect, useCallback} from "react";
 import ToastContext from "./ToastContext.tsx";
 import {toastService} from "../../services/toast.service.ts";
-import "../../style/contexts/contexts.scss";
-import type {Toast} from "@shared/types/toast.type.ts";
+// import "../../style/contexts/contexts.scss";
+import type {Toast} from "../../types/toast.type.ts";
+
 
 const ToastProvider = ({children}: { children: ReactNode }) => {
     const [toasts, setToasts] = useState<Toast[]>([]);

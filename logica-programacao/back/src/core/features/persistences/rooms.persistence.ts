@@ -42,6 +42,13 @@ export class RoomsPersistence implements PersistenceBase<Rooms, RoomRecord> {
         return this.store.readAll().map((record) => this.toEntity(record));
     }
 
+    async findActives(): Promise<Rooms[]> {
+        return this.store
+            .readAll()
+            .filter(r => r.isActive)
+            .map((record) => this.toEntity(record));
+    }
+
     async update(room: Rooms): Promise<Rooms> {
         const records = this.store.readAll();
         const index = records.findIndex((record) => record.id === room.id);

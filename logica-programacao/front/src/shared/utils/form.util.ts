@@ -1,27 +1,25 @@
-import {t} from "@shared/messages/translation.message.ts";
-import {ErrorMessage} from "@shared/messages/error.message.ts";
-import {StringUtil} from "@shared/utils/string.util.ts";
-import {toastService} from "@shared/services/toast.service.ts";
+import {toastService} from "../services/toast.service.ts";
 
 export class FormUtil {
     public getFormValue(formData: FormData, key: string): string {
         const value: FormDataEntryValue | null = formData.get(key);
         if (value === null || value === "") {
-            toastService.error(t(ErrorMessage.nullFieldError.required, {field: key}));
+            toastService.error('Campo obrigatório');
             return "";
         }
         return value.toString();
     }
 
-    public getFormValueNumber(formData: FormData, key: string): number {
-        const value = this.getFormValue(formData, key);
-
-        if (value === null || value === "") {
-            return -1;
-        }
-
-        return StringUtil.strToNumber(value);
-    }
+    //
+    // public getFormValueNumber(formData: FormData, key: string): number {
+    //     const value = this.getFormValue(formData, key);
+    //
+    //     if (value === null || value === "") {
+    //         return -1;
+    //     }
+    //
+    //     return StringUtil.strToNumber(value);
+    // }
 
     public getOptionalValue(formData: FormData, key: string): string | undefined {
         return formData.get(key)?.toString();

@@ -127,4 +127,26 @@ export class PatientAttendances extends EntityBase<PatientAttendancesProps> {
         });
     }
 
+    startTreatment(): this {
+        if (!this.status.isQueue()) {
+            throw new BusinessRuleError(`PatientId is not waiting for treatment`);
+        }
+
+        return this.cloneWith({
+            status: PatientStatusVo.TREATMENT,
+            treatmentStartedAt: DateUtil.now(),
+        });
+    }
+
+    finalizeTreatment(): this {
+        if (!this.status.isTreatment()) {
+            throw new BusinessRuleError(`PatientId is not in treatment`);
+        }
+
+        return this.cloneWith({
+            status: PatientStatusVo.COMPLETED,
+            treatmentFinishedAt: DateUtil.now(),
+        });
+    }
+
 }

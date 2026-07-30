@@ -1,0 +1,146 @@
+@use "variables" as *;
+@use "mixins" as *;
+
+:root {
+  @each $name, $value in $colors {
+    --color-#{$name}: #{$value};
+  }
+  --font-body: #{font(body)};
+  --font-mono: #{font(mono)};
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: color(background);
+  color: color(on-background);
+  @include typography(body-md);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img, svg, video {
+  display: block;
+  max-width: 100%;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  margin: 0;
+}
+
+h1 {
+  @include typography(display-lg, bold);
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  @include typography(headline-lg, semibold);
+}
+
+h3 {
+  @include typography(headline-md, semibold);
+}
+
+h4 {
+  @include typography(title-md, semibold);
+}
+
+p {
+  @include typography(body-lg);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color $transition-fast, background-color $transition-fast, border-color $transition-fast;
+}
+
+button, input, textarea, select {
+  @include typography(body-md);
+}
+
+button {
+  border: 0;
+  cursor: pointer;
+  transition: background-color $transition-fast, color $transition-fast, border-color $transition-fast, box-shadow $transition-fast;
+}
+
+input, textarea, select, option {
+  background: color(surface-container-lowest);
+  border: $border-width solid color(outline-variant);
+  border-radius: radius();
+  color: color(on-surface);
+  padding: s(sm);
+
+}
+
+input:focus-visible, textarea:focus-visible, select:focus-visible {
+  @include focus-ring;
+}
+
+button:focus-visible, a:focus-visible {
+  outline: $focus-border-width solid color(primary-action);
+  outline-offset: 2px;
+}
+
+.app-shell {
+  width: min(100% - #{space(margin-mobile) * 2}, #{space(container-max)});
+  margin-inline: auto;
+}
+
+.design-grid {
+  @include desktop-grid;
+}
+
+.surface-card {
+  @include card-surface;
+}
+
+.type-label, .status-badge {
+  @include typography(label-md, medium, mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.status-emergency {
+  color: color(error-strong);
+}
+
+.status-urgent {
+  color: color(warning);
+}
+
+.status-stable {
+  color: color(success);
+}
+
+@include respond(tablet) {
+  .app-shell {
+    width: min(100% - #{space(margin-desktop) * 2}, #{space(container-max)});
+  }
+}
+
+@include respond-max(mobile) {
+  h1 {
+    @include typography(headline-lg-mobile, semibold);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

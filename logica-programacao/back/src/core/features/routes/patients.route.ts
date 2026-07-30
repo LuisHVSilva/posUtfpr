@@ -12,6 +12,18 @@ function buildPatientsRouter(deps: buildPatientsRouterDeps): Router {
     } = deps;
     const router: Router = Router();
 
+    router.post(
+        "/",
+        asyncHandlerMiddleware((req, res) =>
+            controller.registerPatient(req, res))
+    );
+
+    router.get(
+        "/summary",
+        asyncHandlerMiddleware((req, res) =>
+            controller.summary(req, res))
+    );
+
     router.get(
         "/",
         asyncHandlerMiddleware((req, res) =>
