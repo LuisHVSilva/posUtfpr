@@ -1,0 +1,524 @@
+@use "../../../shared/design-system/styles/mixins" as *;
+@use "../../../shared/design-system/styles/variables" as *;
+
+.calls-page {
+  margin-inline: auto;
+  max-width: space(container-max);
+  padding: s(xl);
+}
+
+.calls-page__header {
+  align-items: flex-start;
+  display: flex;
+  gap: s(lg);
+  justify-content: space-between;
+  margin-bottom: s(xl);
+}
+
+.calls-page__header h1 {
+  color: color(primary);
+}
+
+.calls-page__header p {
+  color: color(on-surface-variant);
+  margin-top: s(xs);
+  max-width: calc(#{space(container-max)} / 2);
+}
+
+.calls-page__header .button {
+  min-width: calc(#{$control-min-height} * 3.5);
+}
+
+.patient-summary-grid {
+  display: grid;
+  gap: s(md);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-bottom: s(xl);
+}
+
+.patient-summary-card {
+  align-items: center;
+  display: flex;
+  gap: s(md);
+  min-height: calc(#{$control-min-height} * 2.45);
+  padding: s(lg);
+}
+
+.patient-summary-card__icon {
+  align-items: center;
+  background: color(primary-fixed);
+  border-radius: radius(md);
+  color: color(primary);
+  display: inline-flex;
+  flex: 0 0 calc(#{$control-min-height} + #{s(xs)});
+  height: calc(#{$control-min-height} + #{s(xs)});
+  justify-content: center;
+}
+
+.patient-summary-card__label {
+  color: color(on-surface-variant);
+  display: block;
+  @include typography(body-md);
+}
+
+.patient-summary-card strong {
+  color: color(on-surface);
+  display: block;
+  @include typography(headline-md, semibold);
+}
+
+.patient-summary-card--secondary .patient-summary-card__icon {
+  background: color(secondary-fixed);
+  color: color(secondary);
+}
+
+.patient-summary-card--danger .patient-summary-card__icon {
+  background: color(error-container);
+  color: color(error);
+}
+
+.patient-summary-card--neutral .patient-summary-card__icon {
+  background: color(tertiary-fixed);
+  color: color(tertiary);
+}
+
+.patient-table {
+  @include card-surface;
+  overflow: hidden;
+}
+
+.patient-table__header {
+  align-items: center;
+  background: color(surface-container-low);
+  border-bottom: $border-width solid color(outline-variant);
+  display: flex;
+  justify-content: space-between;
+  padding: s(md) s(lg);
+}
+
+.patient-table__header h2 {
+  color: color(on-surface);
+  @include typography(title-md, semibold);
+}
+
+.patient-table__tools {
+  display: flex;
+  gap: s(sm);
+}
+
+.patient-table__tools button,
+.patient-table__actions button,
+.calls-modal__header button,
+.calls-modal__hero button {
+  align-items: center;
+  background: transparent;
+  border-radius: radius(default);
+  color: color(on-surface-variant);
+  display: inline-flex;
+  justify-content: center;
+  min-height: s(xl);
+  min-width: s(xl);
+}
+
+.patient-table__tools button:hover,
+.patient-table__actions button:hover,
+.calls-modal__header button:hover,
+.calls-modal__hero button:hover {
+  background: color(surface-variant);
+}
+
+.patient-table__scroll {
+  overflow-x: auto;
+}
+
+.patient-table table {
+  border-collapse: collapse;
+  min-width: calc(#{$layout-sidebar-width} * 3.5);
+  width: 100%;
+}
+
+.patient-table th {
+  background: color(surface-container-lowest);
+  border-bottom: $border-width solid color(outline-variant);
+  color: color(on-surface-variant);
+  padding: s(md) s(lg);
+  text-align: left;
+  @include typography(label-md, medium, mono);
+  text-transform: uppercase;
+}
+
+.patient-table th:last-child {
+  text-align: right;
+}
+
+.patient-table td {
+  border-bottom: $border-width solid color(outline-variant, .45);
+  color: color(on-surface);
+  padding: s(md) s(lg);
+  position: relative;
+  vertical-align: middle;
+  @include typography(body-md);
+}
+
+.patient-table__row:hover {
+  background: color(secondary-container, .05);
+}
+
+.patient-table__row td:first-child::before {
+  bottom: 0;
+  content: "";
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: s(xs);
+}
+
+.patient-table__row--emergency td:first-child::before {
+  background: color(error-strong);
+}
+
+.patient-table__row--urgent td:first-child::before {
+  background: color(warning);
+}
+
+.patient-table__row--stable td:first-child::before {
+  background: color(success);
+}
+
+.patient-table__identity {
+  align-items: center;
+  display: flex;
+  gap: s(md);
+}
+
+.patient-table__identity strong,
+.registry-list__item strong {
+  color: color(on-surface);
+  display: block;
+  @include typography(body-md, semibold);
+}
+
+.patient-table__identity span:not(.patient-table__avatar),
+.registry-list__item span {
+  color: color(on-surface-variant);
+  display: block;
+  @include typography(caption);
+}
+
+.patient-table__avatar {
+  align-items: center;
+  background: color(primary-fixed);
+  border-radius: radius(default);
+  color: color(primary);
+  display: inline-flex;
+  flex: 0 0 s(xl);
+  height: s(xl);
+  justify-content: center;
+  @include typography(caption, bold);
+}
+
+.patient-table__row--urgent .patient-table__avatar {
+  background: color(secondary-fixed);
+  color: color(secondary);
+}
+
+.patient-table__row--stable .patient-table__avatar {
+  background: color(tertiary-fixed);
+  color: color(tertiary);
+}
+
+.patient-table__mono {
+  @include typography(label-md, medium, mono);
+}
+
+.patient-table__status {
+  border-radius: radius(default);
+  display: inline-flex;
+  padding: s(xs) s(sm);
+  @include typography(label-md, bold, mono);
+  text-transform: uppercase;
+}
+
+.patient-table__status--emergency {
+  background: color(error-container);
+  color: color(on-error-container);
+}
+
+.patient-table__status--urgent {
+  background: color(warning-container);
+  color: color(warning);
+}
+
+.patient-table__status--stable {
+  background: color(success-container);
+  color: color(success);
+}
+
+.patient-table__actions {
+  display: flex;
+  gap: s(sm);
+  justify-content: flex-end;
+  opacity: 0;
+  transition: opacity $transition-fast;
+}
+
+.patient-table__row:hover .patient-table__actions,
+.patient-table__actions:focus-within {
+  opacity: 1;
+}
+
+.patient-table__footer {
+  align-items: center;
+  background: color(surface-container-lowest, .45);
+  border-top: $border-width solid color(outline-variant);
+  display: flex;
+  justify-content: space-between;
+  padding: s(md) s(lg);
+}
+
+.patient-table__footer p {
+  color: color(on-surface-variant);
+  @include typography(body-md);
+}
+
+.patient-table__footer > div {
+  display: flex;
+  gap: s(sm);
+}
+
+.patient-table__footer .button {
+  border: $border-width solid color(outline-variant);
+  min-height: calc(#{$control-min-height} - #{s(md)});
+  padding: s(xs) s(md);
+}
+
+.calls-modal {
+  align-items: flex-start;
+  background: color(on-background, .4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  padding: s(3xl) s(md) s(md);
+  position: fixed;
+  z-index: 10;
+}
+
+.calls-modal__content {
+  @include card-surface;
+  box-shadow: $shadow-modal;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - #{s(3xl)} * 2);
+  max-width: calc(#{$modal-max-width} * 1.35);
+  overflow: hidden;
+  width: 100%;
+}
+
+.calls-modal__content--compact {
+  max-width: $modal-max-width;
+}
+
+.calls-modal__hero {
+  align-items: center;
+  background: color(primary);
+  color: color(on-primary);
+  display: flex;
+  justify-content: space-between;
+  padding: s(lg) s(xl);
+}
+
+.calls-modal__hero h2 {
+  @include typography(headline-md, semibold);
+}
+
+.calls-modal__hero p {
+  color: color(on-primary, .8);
+  @include typography(body-md);
+}
+
+.calls-modal__hero button {
+  color: color(on-primary);
+}
+
+.calls-modal__hero button:hover {
+  background: color(on-primary, .1);
+}
+
+.calls-modal__tabs {
+  border-bottom: $border-width solid color(outline-variant);
+  display: flex;
+  padding-inline: s(xl);
+}
+
+.calls-modal__tabs button {
+  background: transparent;
+  border-bottom: calc(#{$border-width} * 4) solid color(primary, 0);
+  color: color(on-surface-variant);
+  padding: s(md) s(lg);
+  @include typography(title-md, semibold);
+}
+
+.calls-modal__tabs button.is-active {
+  border-color: color(primary);
+  color: color(primary);
+}
+
+.registry-list {
+  display: grid;
+  gap: s(md);
+  overflow-y: auto;
+  padding: s(xl);
+}
+
+.registry-list__item {
+  align-items: center;
+  border: $border-width solid color(outline-variant);
+  border-radius: radius(xl);
+  display: flex;
+  justify-content: space-between;
+  padding: s(md);
+}
+
+.registry-list__item:hover {
+  background: color(surface-container-low);
+}
+
+.registry-list__item > div {
+  align-items: center;
+  display: flex;
+  gap: s(md);
+}
+
+.registry-list__item > div > span {
+  color: color(primary-container);
+}
+
+.registry-list__item .button {
+  opacity: 0;
+}
+
+.registry-list__item:hover .button,
+.registry-list__item .button:focus-visible {
+  opacity: 1;
+}
+
+.calls-modal__footer {
+  background: color(surface-container-lowest, .45);
+  border-top: $border-width solid color(outline-variant);
+  display: flex;
+  justify-content: flex-end;
+  padding: s(md) s(xl);
+}
+
+.calls-modal__header {
+  align-items: center;
+  border-bottom: $border-width solid color(outline-variant);
+  display: flex;
+  justify-content: space-between;
+  padding: s(md) s(lg);
+}
+
+.calls-modal__header h2 {
+  color: color(primary);
+  @include typography(title-md, semibold);
+}
+
+.edit-patient-form {
+  display: grid;
+  gap: s(lg);
+  padding: s(xl);
+}
+
+.edit-patient-form label {
+  color: color(on-surface-variant);
+  display: grid;
+  gap: s(xs);
+  @include typography(label-md, medium, mono);
+}
+
+.edit-patient-form input {
+  min-height: $control-min-height;
+  padding: s(sm) s(md);
+  width: 100%;
+}
+
+.edit-patient-form__grid {
+  display: grid;
+  gap: s(md);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.edit-patient-form footer {
+  border-top: $border-width solid color(outline-variant);
+  display: grid;
+  gap: s(md);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding-top: s(lg);
+}
+
+.edit-patient-form footer .button--ghost {
+  border: $border-width solid color(primary);
+  color: color(primary);
+}
+
+@include respond-max(tablet) {
+  .patient-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@include respond-max(mobile) {
+  .calls-page {
+    padding: 0;
+  }
+
+  .calls-page__header {
+    flex-direction: column;
+  }
+
+  .calls-page__header .button,
+  .edit-patient-form footer .button {
+    width: 100%;
+  }
+
+  .patient-summary-grid,
+  .edit-patient-form__grid,
+  .edit-patient-form footer {
+    grid-template-columns: 1fr;
+  }
+
+  .patient-table__header,
+  .patient-table__footer,
+  .registry-list__item {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: s(md);
+  }
+
+  .patient-table__footer > div,
+  .patient-table__footer .button,
+  .registry-list__item .button {
+    width: 100%;
+  }
+
+  .calls-modal {
+    padding-top: s(md);
+  }
+
+  .calls-modal__content {
+    max-height: calc(100vh - #{s(md)} * 2);
+  }
+
+  .calls-modal__hero,
+  .calls-modal__tabs,
+  .registry-list,
+  .calls-modal__footer,
+  .edit-patient-form {
+    padding-inline: s(lg);
+  }
+
+  .calls-modal__tabs {
+    overflow-x: auto;
+  }
+}

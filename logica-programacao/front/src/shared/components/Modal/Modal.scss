@@ -1,0 +1,9 @@
+@use "../../design-system/styles/mixins" as *;
+@use "../../design-system/styles/variables" as *;
+
+.modal { align-items: center; background: color(on-background, .4); display: flex; inset: 0; justify-content: center; padding: s(md); position: fixed; z-index: 10; backdrop-filter: blur(4px); }
+.modal__content { background: color(surface-container-lowest); border-radius: radius(xl); box-shadow: $shadow-modal; margin: 0; max-height: calc(100% - #{s(md) * 2}); max-width: $modal-max-width; overflow: auto; width: 100%; }
+.modal__header { align-items: center; background: color(primary); color: color(on-primary); display: flex; justify-content: space-between; padding: s(lg); }
+.modal__header h2 { align-items: center; display: flex; gap: s(sm); @include typography(headline-md, semibold); }
+.modal__close { background: transparent; color: inherit; font-size: 1.5rem; padding: s(xs); }
+.modal__body { display: grid; gap: s(lg); padding: s(xl); }

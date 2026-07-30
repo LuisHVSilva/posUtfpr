@@ -1,0 +1,40 @@
+@use '../base/mixins' as *;
+@use '../base/variables' as *;
+
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  button {
+    background-color: transparent;
+    border: none;
+    margin-left: s(2);
+  }
+}
+
+.toast {
+  min-width: 280px;
+  padding: 14px 18px;
+  border-radius: 8px;
+  color: color(contrast);
+  font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: slideIn 0.3s ease;
+}
+
+.toast--success { background: color(right); }
+.toast--error   { background: color(error); }
+.toast--warning { background: color(warning); }
+.toast--info    { background: color(info); }
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}

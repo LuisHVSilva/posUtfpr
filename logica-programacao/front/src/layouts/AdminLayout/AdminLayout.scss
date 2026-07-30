@@ -1,0 +1,15 @@
+@use "../../shared/design-system/styles/mixins" as *;
+@use "../../shared/design-system/styles/variables" as *;
+
+.admin-layout { min-height: 100vh; }
+.admin-layout__sidebar { background: color(surface-container-low); border-right: $border-width solid color(outline-variant); bottom: 0; display: flex; flex-direction: column; left: 0; padding: s(xl) s(md); position: fixed; top: 0; width: $layout-sidebar-width; z-index: 4; }
+.admin-layout__identity { align-items: center; color: color(primary); display: flex; gap: s(md); margin-bottom: s(xl); padding: 0 s(sm); }
+.admin-layout__identity strong, .admin-layout__identity span { display: block; }.admin-layout__identity strong { @include typography(headline-md, bold); }.admin-layout__identity span { color: color(on-surface-variant); @include typography(body-md); }
+.admin-layout__side-nav { display: flex; flex: 1; flex-direction: column; justify-content: space-between; }.admin-layout__side-nav > div { display: grid; gap: s(xs); }
+.admin-layout__side-nav a { align-items: center; border-radius: radius(md); color: color(on-surface-variant); display: flex; gap: s(md); min-height: $control-min-height; padding: s(sm) s(md); @include typography(body-md); }
+.admin-layout__side-nav a:hover { background: color(surface-variant); color: color(on-secondary-container); }.admin-layout__side-nav a.is-active { background: color(secondary-container); color: color(on-secondary-container); font-weight: font-weight(semibold); }.admin-layout__side-nav a.is-danger { color: color(error); }
+.admin-layout__side-footer { border-top: $border-width solid color(outline-variant, .45); padding-top: s(xl); }
+.admin-layout__main { margin-left: $layout-sidebar-width; min-height: 100vh; padding: s(margin-desktop); }
+
+@include respond-max(tablet) { .admin-layout__sidebar { width: $layout-sidebar-tablet-width; }.admin-layout__main { margin-left: $layout-sidebar-tablet-width; } }
+@include respond-max(mobile) { .admin-layout__sidebar { bottom: auto; padding: s(sm) s(md); position: sticky; top: 0; width: 100%; }.admin-layout__identity { margin-bottom: s(sm); }.admin-layout__identity strong { @include typography(title-md, bold); }.admin-layout__identity span { @include typography(caption); }.admin-layout__side-nav { display: block; }.admin-layout__side-nav > div:first-child { display: flex; gap: s(xs); overflow-x: auto; }.admin-layout__side-nav a { flex: 0 0 auto; }.admin-layout__side-nav a span { white-space: nowrap; }.admin-layout__side-footer { display: none; }.admin-layout__main { margin-left: 0; padding: s(margin-mobile); } }

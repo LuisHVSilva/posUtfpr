@@ -1,0 +1,324 @@
+@use "../../../shared/design-system/styles/mixins" as *;
+@use "../../../shared/design-system/styles/variables" as *;
+
+.dashboard-page {
+  margin-inline: auto;
+  max-width: space(container-max);
+}
+
+.dashboard-page__header {
+  align-items: center;
+  display: flex;
+  gap: s(md);
+  justify-content: space-between;
+  margin-bottom: s(xl);
+}
+
+.dashboard-page__header h1 {
+  color: color(primary);
+}
+
+.dashboard-page__header p {
+  color: color(on-surface-variant);
+  margin-top: s(xs);
+}
+
+.summary-grid {
+  display: grid;
+  gap: s(md);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-bottom: s(xl);
+}
+
+.summary-card {
+  background: color(surface-container-lowest);
+  box-shadow: $shadow-card;
+  min-height: 6.125rem;
+  padding: s(lg);
+  border: 2px color(surface-container-lowest);
+}
+
+.summary-card__label {
+  color: color(on-surface-variant);
+  display: block;
+  @include typography(label-md, medium, mono);
+  text-transform: uppercase;
+}
+
+.summary-card strong {
+  color: color(primary);
+  display: block;
+  margin-top: s(xs);
+  @include typography(display-lg, bold);
+}
+
+.summary-card--secondary strong {
+  color: color(secondary);
+}
+
+.summary-card--neutral strong {
+  color: color(tertiary);
+}
+
+.summary-card--danger {
+  border-left: 0.25rem solid color(error-strong);
+}
+
+.summary-card--danger strong {
+  color: color(error-strong);
+}
+
+.room-grid {
+  display: grid;
+  gap: s(lg);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.room-card {
+  background: color(surface-container-lowest);
+  box-shadow: $shadow-card;
+  display: flex;
+  flex-direction: column;
+  min-height: $card-min-height;
+  transition: border-color $transition-standard, box-shadow $transition-standard, transform $transition-standard;
+}
+
+.room-card:hover {
+  border-color: color(primary-action);
+  box-shadow: $shadow-card-hover;
+  transform: translateY(-0.125rem);
+}
+
+.room-card__bar {
+  background: color(primary);
+  height: $card-bar-height;
+}
+
+.room-card--emergency .room-card__bar {
+  background: color(error-strong);
+}
+
+.room-card--closed {
+  background: color(surface-container-low);
+  opacity: .72;
+}
+
+.room-card--closed:hover {
+  border-color: color(outline-variant);
+  box-shadow: $shadow-card;
+  transform: none;
+}
+
+.room-card--closed .room-card__bar {
+  background: color(outline);
+}
+
+.room-card__body {
+  flex: 1;
+  padding: s(lg);
+}
+
+.room-card__heading {
+  align-items: flex-start;
+  display: flex;
+  gap: s(sm);
+  justify-content: space-between;
+}
+
+.room-card__heading h3 {
+  color: color(on-surface);
+  @include typography(title-md, semibold);
+}
+
+.room-card__heading > div span {
+  color: color(on-surface-variant);
+  display: block;
+  @include typography(caption);
+}
+
+.status-badge {
+  background: color(secondary-container, .2);
+  color: color(on-secondary-container);
+  padding: s(xs) s(sm);
+  white-space: nowrap;
+}
+
+.room-card--emergency .status-badge {
+  background: color(error-container);
+  color: color(on-error-container);
+}
+
+.room-card--closed .status-badge {
+  background: color(tertiary-fixed, .8);
+  color: color(on-surface-variant);
+}
+
+.room-card__details {
+  display: grid;
+  gap: s(md);
+  margin-top: s(lg);
+}
+
+.room-card__details > div {
+  display: grid;
+  gap: s(xs);
+}
+
+.room-card__label {
+  color: color(on-surface-variant);
+  @include typography(label-md, medium, mono);
+  text-transform: uppercase;
+}
+
+.room-card__details strong {
+  color: color(primary);
+  @include typography(headline-md, semibold);
+}
+
+.room-card--emergency .room-card__details strong {
+  color: color(error-strong);
+}
+
+.room-card__details b {
+  color: color(on-surface);
+  @include typography(body-md, semibold);
+}
+
+.room-card__closed {
+  align-items: center;
+  color: color(on-surface-variant);
+  display: flex;
+  flex-direction: column;
+  gap: s(md);
+  justify-content: center;
+  min-height: 9.375rem;
+  text-align: center;
+}
+
+.room-card__footer {
+  background: color(surface-container-low);
+  border-top: $border-width solid color(outline-variant);
+  padding: s(md);
+}
+
+.room-card__footer .button {
+  min-height: 3.375rem;
+}
+
+.room-card--closed .room-card__footer .button {
+  background: color(outline-variant);
+  color: color(outline);
+}
+
+.dashboard-page__mobile-action {
+  display: none;
+}
+
+.form-grid {
+  display: grid;
+  gap: s(lg);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.form-grid label, .modal__body > label {
+  color: color(on-surface);
+  display: grid;
+  gap: s(xs);
+  @include typography(title-md, semibold);
+}
+
+.form-grid input, .modal__body textarea {
+  min-height: $control-min-height;
+  padding: s(md);
+  width: 100%;
+}
+
+.checkbox-field {
+  align-items: center;
+  display: flex !important;
+  gap: s(sm);
+  padding-top: s(xl);
+}
+
+.checkbox-field input {
+  accent-color: color(error-strong);
+  min-height: auto;
+  width: auto;
+}
+
+.checkbox-field span {
+  align-items: center;
+  color: color(on-surface);
+  display: flex;
+  gap: s(xs);
+}
+
+.checkbox-field span.is-emergency {
+  color: color(error-strong);
+}
+
+.modal__actions {
+  border-top: $border-width solid color(outline-variant);
+  display: flex;
+  gap: s(md);
+  justify-content: flex-end;
+  padding-top: s(lg);
+}
+
+@include respond-max(tablet) {
+  .room-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@include respond-max(mobile) {
+  .dashboard-page__header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .dashboard-page__header .button {
+    width: 100%;
+  }
+  .summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .summary-card {
+    padding: s(md);
+  }
+  .summary-card strong {
+    font-size: 2rem;
+    line-height: 2.4rem;
+  }
+  .room-grid {
+    grid-template-columns: 1fr;
+  }
+  .dashboard-page__mobile-action {
+    align-items: center;
+    background: color(primary);
+    border-radius: radius(full);
+    bottom: s(lg);
+    color: color(on-primary);
+    display: flex;
+    height: 3.5rem;
+    justify-content: center;
+    position: fixed;
+    right: s(lg);
+    width: 3.5rem;
+    z-index: 3;
+  }
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .checkbox-field {
+    padding-top: 0;
+  }
+  .modal__body {
+    padding: s(lg);
+  }
+  .modal__actions {
+    flex-direction: column-reverse;
+  }
+  .modal__actions .button {
+    width: 100%;
+  }
+}

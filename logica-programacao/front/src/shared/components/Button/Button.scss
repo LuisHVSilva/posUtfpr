@@ -1,0 +1,50 @@
+@use "../../design-system/styles/mixins" as *;
+@use "../../design-system/styles/variables" as *;
+
+.button {
+  align-items: center;
+  border-radius: radius(md);
+  display: inline-flex;
+  gap: s(sm);
+  justify-content: center;
+  min-height: $control-min-height;
+  padding: s(sm) s(md);
+  @include typography(body-md, semibold);
+
+  &:hover:not(:disabled) {
+    filter: brightness(0.96);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.52;
+  }
+
+  &--full {
+    width: 100%;
+  }
+
+  &--primary {
+    background: color(primary);
+    color: color(on-primary);
+  }
+
+  &--neutral {
+    background: color(outline);
+    color: color(on-primary);
+  }
+
+  &--danger {
+    background: color(error-strong);
+    color: color(on-error);
+  }
+
+  &--ghost {
+    background: transparent;
+    color: color(on-surface-variant);
+  }
+}
