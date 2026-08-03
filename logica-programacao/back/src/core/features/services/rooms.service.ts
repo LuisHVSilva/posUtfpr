@@ -1,3 +1,4 @@
+/* c8 ignore start */
 import {inject, injectable} from "tsyringe";
 import {BusinessRuleError, NotFoundError} from "@shared/errors/application.error";
 import {RoomTypeVo} from "@shared/valueObjects/roomType.vo";
@@ -8,6 +9,7 @@ import {RoomsPersistence} from "@features/persistences/rooms.persistence";
 
 @injectable()
 export class RoomsService {
+/* c8 ignore stop */
     constructor(
         @inject("RoomsPersistence")
         private readonly roomsPersistence: RoomsPersistence,

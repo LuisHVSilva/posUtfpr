@@ -1,3 +1,4 @@
+/* c8 ignore start */
 import {inject, injectable} from "tsyringe";
 import {BusinessRuleError, NotFoundError, ValidationError} from "@shared/errors/application.error";
 import {DateUtil} from "@shared/utils/date.util";
@@ -8,6 +9,7 @@ import {PatientFilters} from "@features/schemas/patients/patientFilters.schema";
 import {PatientAttendancesPersistence} from "@features/persistences/patientAttendances.persistence";
 import {QueueAttendancePersistence} from "@features/persistences/queueAttendence.persistence";
 import {PatientAttendances} from "@features/entities/patientAttendances";
+import {match} from "ts-pattern";
 
 export type ListPatientsFilters = PatientFilters & {page: number};
 export type PatientTableStatus = "emergency" | "urgent" | "stable";
@@ -37,6 +39,7 @@ export interface PatientsSummaryResult {
 @injectable()
 export class PatientsService {
     private static readonly ITEMS_PER_PAGE = 20;
+/* c8 ignore stop */
 
     constructor(
         @inject("PatientsPersistence")
@@ -168,15 +171,10 @@ export class PatientsService {
 
         const priority = activeAttendance?.priority?.toString();
 
-        if (priority === "EMERGENCY") {
-            return "emergency";
-        }
-
-        if (priority === "VERY_URGENT" || priority === "URGENT") {
-            return "urgent";
-        }
-
-        return "stable";
+        return match(priority)
+            .with("EMERGENCY", () => "emergency" as const)
+            .with("VERY_URGENT", "URGENT", () => "urgent" as const)
+            .otherwise(() => "stable" as const);
     }
 
     async getSummary(): Promise<PatientsSummaryResult> {

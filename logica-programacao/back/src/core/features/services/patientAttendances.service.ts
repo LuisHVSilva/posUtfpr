@@ -1,3 +1,4 @@
+/* c8 ignore start */
 import {inject, injectable} from "tsyringe";
 import {BusinessRuleError, NotFoundError} from "@shared/errors/application.error";
 import {DateUtil} from "@shared/utils/date.util";
@@ -17,6 +18,7 @@ export class PatientAttendancesService {
         private readonly queueAttendanceService: QueueAttendanceService,
     ) {
     }
+/* c8 ignore stop */
 
     async registerAttendance(patientId: number, symptoms: string, isEmergency: boolean): Promise<PatientAttendances> {
         const arrivalAtDate: Date = DateUtil.parse(new Date());

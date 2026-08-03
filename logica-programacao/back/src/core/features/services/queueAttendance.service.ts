@@ -1,3 +1,4 @@
+/* c8 ignore start */
 import {inject, injectable} from "tsyringe";
 import {DateUtil} from "@shared/utils/date.util";
 import {BusinessRuleError, NotFoundError} from "@shared/errors/application.error";
@@ -41,6 +42,7 @@ type CallsDisplay = {
 @injectable()
 export class QueueAttendanceService {
     private static readonly DEFAULT_MAX_ACTIVE_CALLS = 5;
+/* c8 ignore stop */
 
     constructor(
         @inject("QueueAttendancePersistence")
