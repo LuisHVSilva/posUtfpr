@@ -1,0 +1,13 @@
+$font-body: Arial, Helvetica, sans-serif;
+$font-editorial: Georgia, 'Times New Roman', serif;
+$space-sm: 0.5rem;
+$space-md: 1rem;
+$space-lg: 2rem;
+$space-xl: 4rem;
+$radius: 0.75rem;
+$content-width: 72rem;
+$breakpoints: (tablet: 640px, desktop: 1024px);
+$themes: (
+    light: (background: #f7f7f2, surface: #ffffff, text: #202823, muted: #58625c, border: #d6ded8),
+    dark: (background: #171c19, surface: #222a25, text: #edf2ee, muted: #bac8be, border: #45524a)
+);

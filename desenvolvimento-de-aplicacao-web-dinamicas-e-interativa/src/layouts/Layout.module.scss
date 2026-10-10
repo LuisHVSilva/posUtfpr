@@ -1,0 +1,36 @@
+@use '../styles/variables' as tokens;
+@use '../styles/mixins' as mixins;
+
+.shell {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    width: 100%;
+    max-width: tokens.$content-width;
+    margin-inline: auto;
+    padding: tokens.$space-lg tokens.$space-md;
+    flex: 1;
+    min-width: 0;
+
+    @include mixins.from(desktop) {
+        padding: tokens.$space-xl tokens.$space-lg;
+    }
+}
+
+.footer {
+    border-top: 1px solid var(--folio-border);
+    padding: tokens.$space-lg tokens.$space-md;
+    text-align: center;
+    color: var(--folio-muted);
+    font-size: 0.875rem;
+}
+
+.adminNav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: tokens.$space-lg;
+    margin-bottom: tokens.$space-lg;
+}

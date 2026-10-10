@@ -1,0 +1,77 @@
+@use '../styles/variables' as tokens;
+@use '../styles/mixins' as mixins;
+
+.header {
+    border-bottom: 1px solid var(--folio-border);
+}
+
+.bar {
+    display: flex;
+    align-items: center;
+    gap: tokens.$space-md;
+    padding: tokens.$space-md;
+    margin-inline: auto;
+    max-width: tokens.$content-width;
+}
+
+.brand {
+    font-family: tokens.$font-editorial;
+    font-size: 2rem;
+    font-weight: 700;
+    text-decoration: none;
+
+    span { color: var(--folio-accent); }
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    gap: tokens.$space-sm;
+}
+
+.desktop {
+    display: none;
+
+    @include mixins.from(tablet) {
+        display: flex;
+        align-items: center;
+        gap: tokens.$space-lg;
+        margin-left: auto;
+    }
+}
+
+.burger, .mobile {
+    @include mixins.from(tablet) { display: none; }
+}
+
+.burger { min-width: 2.75rem; min-height: 2.75rem; }
+
+.mobile nav {
+    display: flex;
+    flex-direction: column;
+    gap: tokens.$space-md;
+    padding: tokens.$space-md;
+}
+
+.desktop a, .mobile a {
+    text-decoration: none;
+    padding-block: tokens.$space-sm;
+
+    &[aria-current='page'] {
+        color: var(--folio-link);
+        text-decoration: underline;
+        text-underline-offset: 0.4rem;
+    }
+}
+
+.skip {
+    position: absolute;
+    top: -5rem;
+    left: tokens.$space-md;
+    padding: tokens.$space-sm;
+    background: var(--folio-surface);
+    z-index: 10;
+
+    &:focus { top: tokens.$space-sm; }
+}

@@ -1,0 +1,15 @@
+@use '../styles/variables' as tokens;
+@use '../styles/mixins' as mixins;
+
+.heading {
+    margin-bottom: tokens.$space-lg;
+
+    h1 {
+        font-size: 2.25rem;
+        line-height: 1.12;
+
+        @include mixins.from(desktop) {
+            font-size: 3.5rem;
+        }
+    }
+}
