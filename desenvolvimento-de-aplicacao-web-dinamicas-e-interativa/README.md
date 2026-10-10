@@ -4,7 +4,7 @@ Mini blog editorial acadêmico em React e TypeScript. F1–F4 entregam a fundaç
 login JWT, sessão verificada, proteção do painel, cadastro demonstrativo,
 busca/paginação de publicações, leitura/comentários, CRUD simulado,
 favoritos locais, tema persistente e apresentação editorial responsiva.
-A F5 mede a cobertura e valida os fluxos com testes determinísticos.
+A F5 mede a cobertura; a F6 valida e publica a aplicação com CI/CD e rotas restauráveis.
 
 Versões instaladas e fixadas no `yarn.lock`: React 19.3.0, TypeScript 5.9.3,
 Vite 7.3.7, React Router 7.18.4, Mantine 8.3.18, Zod 4.6.5, resolver Mantine/Zod
@@ -62,8 +62,8 @@ O tema usa exclusivamente o gerenciador do Mantine. As cores CSS acompanham
 `/admin` exige sessão autenticada; o acesso aguarda a verificação em `/auth/me`.
 Isso não representa uma permissão administrativa real. O cabeçalho autenticado
 exibe Painel e Sair. Favoritos, tema e acabamento estão implementados.
-Testes e cobertura estão verificados localmente. A entrega F6 está em validação remota;
-o estado observado de CI, publicação e branch consta na seção de entrega abaixo.
+Testes, CI/CD e publicação estão verificados. Revisão humana de código/visual continua
+pendente; o estado observado da entrega consta abaixo.
 
 A DummyJSON simula cadastro e CRUD sem persistir alterações no servidor.
 Cadastro demonstrativo não cria credenciais válidas para login. O formulário
@@ -78,9 +78,19 @@ O projeto é a subpasta `desenvolvimento-de-aplicacao-web-dinamicas-e-interativa
 GitHub só executa workflows na raiz do repositório: o arquivo ativo é
 `/.github/workflows/folio.yml`; a cópia nesta pasta é o template correspondente.
 
-Pages já está habilitado para GitHub Actions. URL configurada, **ainda aguardando
-publicação e verificação nesta rodada**: <https://luishvsilva.github.io/posUtfpr/>.
-PR, CI e proteção de main serão registrados somente depois de confirmados.
+**URL publicada e verificada:** [Folio](https://luishvsilva.github.io/posUtfpr/).
+Entrega mesclada pelo [PR #1](https://github.com/LuisHVSilva/posUtfpr/pull/1),
+após [CI verde do PR](https://github.com/LuisHVSilva/posUtfpr/actions/runs/38017680803).
+[CI/CD da main](https://github.com/LuisHVSilva/posUtfpr/actions/runs/38018159305)
+confirmou os jobs `Folio / qualidade` e `Folio / Pages` com sucesso.
+[Relatórios desse CI](https://github.com/LuisHVSilva/posUtfpr/actions/runs/38018159305/artifacts/11656588744)
+foram disponibilizados pelo workflow.
+
+Proteção de main confirmada pela API: PR obrigatório, check `Folio / qualidade`
+estrito, regras aplicadas a administradores, force push e exclusão bloqueados.
+O número de aprovações exigidas é **0**, pois só o proprietário foi listado como
+colaborador e não pode aprovar o próprio PR. Não há alegação de revisão humana
+concluída. Ao adicionar um revisor, configurar pelo menos uma aprovação obrigatória.
 
 O workflow Folio executa em cada push/PR: checkout, Node fixado, Yarn Classic,
 instalação congelada, typecheck, Vitest/V8 com barreiras, instalação do Chromium,
@@ -133,7 +143,49 @@ nesta sessão, a API listou apenas o proprietário como colaborador.
 | [x] | 7 · Axios/interceptors/safeParse/resolver Zod | `src/services`, schemas e tests; `zod4Resolver` nos hooks |
 | [x] | 8 · Vitest/RTL/user-event | suíte, `coverage/index.html`, LCOV e medições nos diários |
 | [x] | 9 · Playwright, dois fluxos headless | `auth.spec.ts`, `posts.spec.ts`, extras e Pages |
-| [ ] | 10 · CI/CD/Pages/404/proteção main | workflow e fallback prontos; aguardando confirmação remota |
+| [x] | 10 · CI/CD/Pages/404/proteção main | workflow na raiz, PR/CI/CD e URL acima, `pagesRouting`, testes Pages/publicação e proteção confirmada; revisão humana pendente |
+
+## Verificação da F6
+
+Em 09/10/2026: `yarn run check` aprovado com 129 testes em 13 arquivos,
+typecheck, cobertura e build; actionlint 1.7.12 aprovado; 20 E2E determinísticos
+aprovados e 2 reais opcionais ignorados; 3 testes do build de Pages aprovados.
+Dois testes adicionais na URL publicada usaram a DummyJSON real e passaram:
+artigo direto/reload com query/hash; painel direto → login real → reload →
+logout → acesso negado. O deep link publicado devolveu HTTP 404 antes de o
+fallback restaurar a aplicação, comprovando que não dependia da reescrita do Vite.
+
+Cobertura local final após adicionar a recuperação de rotas:
+
+| Métrica | Executado/total | Cobertura |
+|---|---:|---:|
+| Linhas | 1363/1363 | 100% |
+| Statements | 1363/1363 | 100% |
+| Funções | 90/90 | 100% |
+| Branches | 455/465 | 97,84% |
+
+O entrypoint `pagesFallback.ts` é excluído da instrumentação como `main.tsx`;
+suas funções puras estão integralmente medidas em `pagesRouting.ts` e o bootstrap
+é exercitado pelos testes do build estático e do site real. Não foram reduzidos
+limites nem excluídos hooks/services para melhorar percentuais.
+
+Repetir a verificação pública, com rede disponível:
+
+```powershell
+$env:FOLIO_PUBLISHED_URL = 'https://luishvsilva.github.io/posUtfpr/'
+yarn test:published
+Remove-Item Env:FOLIO_PUBLISHED_URL
+```
+
+Esse comando usa configuração separada, sem mocks e sem subir servidor local.
+Usa somente a conta pública de demonstração; não imprime tokens ou senhas.
+A suíte padrão continua determinística e não executa testes de produção.
+
+A publicação foi feita em clone isolado para preservar o checkout original,
+que contém arquivos staged de vários projetos. Nenhum pull/reset foi feito no
+checkout original; antes de seu próximo commit/push, revise e sincronize esse
+estado com a main remota, preservando suas alterações locais.
+Revisão humana e entrega acadêmica permanecem sob responsabilidade da pessoa autora.
 
 ## Publicações e demonstração de gerenciamento
 
