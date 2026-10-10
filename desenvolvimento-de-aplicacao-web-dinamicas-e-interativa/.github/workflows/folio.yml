@@ -1,0 +1,84 @@
+name: Folio
+
+on:
+    push:
+    pull_request:
+    workflow_dispatch:
+
+permissions:
+    contents: read
+
+concurrency:
+    group: folio-${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: false
+
+defaults:
+    run:
+        working-directory: desenvolvimento-de-aplicacao-web-dinamicas-e-interativa
+
+jobs:
+    quality:
+        name: Folio / qualidade
+        runs-on: ubuntu-24.04
+        timeout-minutes: 20
+        steps:
+            - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+              with:
+                  persist-credentials: false
+            - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+              with:
+                  node-version: '22.19.0'
+                  package-manager-cache: false
+            - name: Yarn Classic
+              run: npm install --global yarn@1.22.22 --force
+            - name: Dependências congeladas
+              run: yarn install --frozen-lockfile --non-interactive
+            - name: Typecheck
+              run: yarn typecheck
+            - name: Vitest e cobertura obrigatória
+              run: yarn test:coverage
+            - name: Chromium headless
+              run: yarn playwright install --with-deps chromium
+            - name: E2E determinísticos
+              run: yarn test:e2e
+            - name: Build de Pages
+              env:
+                  FOLIO_BASE_PATH: /${{ github.event.repository.name }}/
+              run: yarn build
+            - name: Deep links no build estático
+              env:
+                  FOLIO_BASE_PATH: /${{ github.event.repository.name }}/
+              run: yarn test:pages
+            - name: Relatórios verificáveis
+              if: always()
+              uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+              with:
+                  name: folio-quality-reports
+                  path: |
+                      desenvolvimento-de-aplicacao-web-dinamicas-e-interativa/coverage
+                      desenvolvimento-de-aplicacao-web-dinamicas-e-interativa/test-results
+                  retention-days: 14
+            - name: Artefato pronto para publicação
+              if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+              uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
+              with:
+                  path: desenvolvimento-de-aplicacao-web-dinamicas-e-interativa/dist
+
+    deploy:
+        name: Folio / Pages
+        needs: quality
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        runs-on: ubuntu-24.04
+        timeout-minutes: 10
+        permissions:
+            contents: read
+            pages: write
+            id-token: write
+        environment:
+            name: github-pages
+            url: ${{ steps.deployment.outputs.page_url }}
+        steps:
+            - uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
+            - name: Publicar somente após CI verde
+              id: deployment
+              uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4

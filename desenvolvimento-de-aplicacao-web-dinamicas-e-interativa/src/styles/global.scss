@@ -1,0 +1,34 @@
+@use 'variables' as tokens;
+@use 'mixins';
+
+@each $scheme, $palette in tokens.$themes {
+    :root[data-mantine-color-scheme='#{$scheme}'] {
+        @each $name, $value in $palette { --folio-#{$name}: #{$value}; }
+        --folio-accent: var(--mantine-primary-color-filled);
+        --folio-link: var(--mantine-primary-color-light-color);
+        --mantine-color-body: var(--folio-background);
+        --mantine-color-text: var(--folio-text);
+        --mantine-color-dimmed: var(--folio-muted);
+    }
+}
+
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    font-family: tokens.$font-body;
+    background: var(--folio-background);
+    color: var(--folio-text);
+    overflow-wrap: anywhere;
+}
+a { color: inherit; }
+a, button, input, textarea, [tabindex] { @include mixins.focus-visible; }
+.mantine-Anchor-root { color: var(--folio-link); }
+.mantine-Button-root { min-height: 2.75rem; }
+
+@include mixins.reduced-motion {
+    *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+    }
+}

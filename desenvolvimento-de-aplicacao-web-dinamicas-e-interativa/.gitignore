@@ -1,0 +1,9 @@
+node_modules/
+dist/
+coverage/
+playwright-report/
+test-results/
+*.local
+.tmp-f5-clean/
+.tmp-f6-repo/
+.tmp-f6-tools/

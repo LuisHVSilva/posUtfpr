@@ -1,0 +1,20 @@
+@use '../styles/variables' as tokens;
+@use '../styles/mixins' as mixins;
+
+.card {
+    min-width: 0;
+    height: 100%;
+    background: var(--folio-surface);
+    border-color: var(--folio-border);
+    border-radius: tokens.$radius;
+
+    h2, h3 { overflow-wrap: anywhere; }
+}
+
+.featured {
+    border-top: 3px solid var(--folio-accent);
+    @include mixins.from(desktop) {
+        padding: tokens.$space-lg;
+        h2 { font-size: 2.5rem; line-height: 1.2; }
+    }
+}

@@ -1,0 +1,17 @@
+@use 'sass:map';
+@use 'variables' as tokens;
+
+@mixin from($breakpoint) {
+    @media (min-width: map.get(tokens.$breakpoints, $breakpoint)) { @content; }
+}
+
+@mixin focus-visible {
+    &:focus-visible {
+        outline: 3px solid var(--folio-link);
+        outline-offset: 4px;
+    }
+}
+
+@mixin reduced-motion {
+    @media (prefers-reduced-motion: reduce) { @content; }
+}
