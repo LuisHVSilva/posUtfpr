@@ -12,6 +12,7 @@
         "test:coverage": "vitest run --coverage",
         "test:e2e": "playwright test",
         "test:pages": "playwright test --config playwright.pages.config.ts",
+        "test:published": "playwright test --config playwright.published.config.ts",
         "build": "yarn typecheck && vite build",
         "preview": "vite preview --host 127.0.0.1",
         "check": "yarn typecheck && yarn test:coverage && yarn build"

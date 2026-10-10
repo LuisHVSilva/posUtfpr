@@ -83,7 +83,7 @@ Use commits pequenos por etapa quando Git estiver disponível. Não avance deixa
 - [x] **E3 — Posts:** Home com busca/paginação, detalhes/comentários, Admin com lista e modal CRUD simulado. **Aceite:** `NavLink`, `useParams`, `useNavigate`; mudanças imediatas sem falsa promessa de persistência; loading/erro/vazio acessíveis.
 - [x] **E4 — Extras e visual:** favoritos locais, tema persistente, bento grid, Font Awesome, responsividade e uma animação GSAP acessível. **Aceite:** modo claro/escuro e favoritos resistem à recarga; `prefers-reduced-motion` respeitado.
 - [x] **E5 — Qualidade:** testes Vitest/RTL e Playwright, cobertura e correções. **Aceite:** `yarn check` + `yarn test:e2e` passam; cobertura medida e relatada, sem falsos percentuais. No Yarn Classic, o script do projeto deve ser chamado por `yarn run check`; o comando interno `yarn check` verifica dependências. Ambos foram executados e aprovados.
-- [ ] **E6 — Entrega:** CI, CD, Pages/SPA fallback, README, regras da branch. **Aceite:** CI verde; deploy/URL e rotas diretas verificadas se houver acesso ao GitHub; caso contrário, comandos e instruções manuais reproduzíveis com itens pendentes explícitos.
+- [x] **E6 — Entrega:** CI, CD, Pages/SPA fallback, README, regras da branch. **Aceite:** CI verde; deploy/URL e rotas diretas verificadas se houver acesso ao GitHub; caso contrário, comandos e instruções manuais reproduzíveis com itens pendentes explícitos. PR/CI/CD, URL pública e proteção main confirmados; revisão humana pendente (nenhum revisor adicional disponível).
 
 **Critério global:** os dez itens do enunciado devem ter evidências rastreáveis em código, teste, README e/ou GitHub. **Se tempo/ferramenta limitar algo, priorize os requisitos acadêmicos, explicite o que falta e não substitua execução por alegações.**
 
@@ -117,7 +117,7 @@ Inclua esta matriz como **checklist** (`[x]` somente para itens verificados; `[ 
 | E3 — Posts | Concluído no escopo F3 | Home com destaque sem duplicação, busca e paginação; artigo/comentários; painel paginado, modal criar/editar e confirmação de excluir; schemas/services validados, hooks e estados acessíveis | Usuário delimitou execução somente à F3; revisão humana de código/visual pendente | 09/10/2026: typecheck/build aprovados; Vitest/RTL 91/91 em 8 arquivos; Chromium determinístico 10/10 e 2 reais ignorados nessa suíte; teste real de posts/contratos CRUD separado 1/1 aprovado; sem commit/PR |
 | E4 — Visual/extras | Concluído no escopo F4 | FavoritesProvider/useFavorites, storage de IDs, controles acessíveis e seção única; tema Mantine preservado, bento responsivo, toque/foco/contraste e uma entrada GSAP com redução de movimento e cleanup | Usuário autorizou somente F4; revisão humana de código/visual pendente | 09/10/2026: typecheck/build aprovados; Vitest/RTL 109/109 em 12 arquivos; Chromium 20/20 e 2 reais ignorados; quatro larguras/dois temas sem overflow; teclado/persistência aprovados; sem commit/PR |
 | E5 — Testes | Concluído no escopo F5 | Cenários complementares de autenticação/posts, cobertura V8 text/HTML/LCOV/JSON, script check com cobertura, correção do caminho de setup e estabilização do teclado no JSDOM; instalação nova validada | Usuário autorizou somente F5; revisão humana pendente | 09/10/2026: 119 testes em 12 arquivos; linhas/statements/funções 100%, branches 97,71%; yarn run check/typecheck/build aprovados; yarn check de dependências aprovado; Chromium 20/20 e 2 reais ignorados, também em instalação nova; sem commit/PR |
-| E6 — Publicação | Em validação remota | Workflow CI/CD preparado, Pages configurado para Actions, base/basename e fallback separados implementados, README/matriz e testes de hospedagem | Somente F6 autorizada; revisão humana pendente; nenhum outro colaborador listado | 129 testes e cobertura 100% linhas/statements/funções, 97,84% branches; typecheck/build, 20 E2E e 3 testes de Pages aprovados; actionlint sem erros; CI/deploy/proteção aguardando confirmação |
+| E6 — Publicação | Concluído no escopo F6 | CI/CD na raiz do monorepo, base/basename/fallback, README/matriz, testes de hospedagem e URL real; Pages habilitado e main protegida | Somente F6 autorizada; revisão humana pendente; nenhum outro colaborador listado, aprovações exigidas 0 | 09/10/2026: 129 testes; cobertura 100% linhas/statements/funções e 97,84% branches; typecheck/build/actionlint, 20 E2E, 3 Pages e 2 publicados reais aprovados; PR #1 mesclado, CI/CD 38018159305 verde, https://luishvsilva.github.io/posUtfpr/ verificada |
 
 **Registro de decisões (acrescentar conforme necessário):** data · contexto · opções · escolha · motivo · consequência.  
 **Registro de problemas (acrescentar conforme necessário):** falha reproduzível · hipótese da IA · correção aplicada · teste que confirmou.  
@@ -388,6 +388,68 @@ Inclua esta matriz como **checklist** (`[x]` somente para itens verificados; `[ 
   CI/CD, Pages e proteção remota de branch pertencem à F6 e seguem pendentes.
   Sem commit/PR nesta rodada; revisão humana de qualidade não presumida.
   Próximo passo humano: revisar F5 e solicitar F6. Trabalho encerrado na F5.
+
+### Registro observado — 09/10/2026 · F6/E6
+
+- **Escopo:** somente F6. CI, CD, hospedagem Pages, fallback, documentação e
+  regras remotas. GitHub acessível após executar a consulta fora da restrição
+  de rede; resultado de auth inválido dentro do sandbox não foi tratado como
+  ausência definitiva de credencial. Repositório público e permissão admin
+  confirmados em `LuisHVSilva/posUtfpr`.
+- **Integração:** a raiz Git é `D:/Projetos/utfpr`, acima da pasta do Folio.
+  Workflow ativo instalado em `../.github/workflows/folio.yml`, mantendo template
+  idêntico em `.github/workflows/folio.yml` do projeto. Publicação feita em clone
+  isolado `.tmp-f6-repo`, preservando o índice e outros projetos do checkout
+  original; não houve pull/reset nesse checkout.
+- **Arquivos:** workflow, `public/404.html`, `scripts/pages-build.ts`,
+  `scripts/serve-pages.ts`, `src/app/pagesRouting.ts`/teste e `pagesFallback.ts`;
+  main/config Vite, TS/package/ignores/attributes, configurações Playwright de
+  Pages/publicação, `e2e/pages.spec.ts`, `published.spec.ts`, README e diários.
+  Sem dependências novas; Node mínimo 22.19 para o servidor de testes TS nativo.
+- **Pipeline:** push/PR com Node 22.19.0 e Yarn 1.22.22, lockfile congelado,
+  typecheck, cobertura obrigatória, Chromium/headless, E2E, build de Pages e
+  deep links estáticos. Job/check estável `quality` / `Folio / qualidade`.
+  CD somente em push de main, dependente de quality; Pages/OIDC write apenas
+  no deploy, ações oficiais fixadas por SHA. Relatórios enviados como artefato
+  por 14 dias. Nenhuma chave/token gravado nos arquivos.
+- **Rotas:** `FOLIO_BASE_PATH=/posUtfpr/` aplicado ao build, basename e fallback.
+  404 possui entrypoint separado; codifica/restaura path/query/hash via parâmetro
+  interno antes do Router, sem storage de rota e sem simples cópia do index.
+  Guardas rejeitam recuperação externa/fora da base. Script de teste estático
+  responde HTTP 404 real, sem history fallback do Vite.
+- **Verificações locais:** `yarn typecheck` e `yarn run check` exit 0;
+  129 testes em 13 arquivos, 1363/1363 linhas/statements, 90/90 funções e
+  455/465 branches (97,84%). `yarn test:e2e` exit 0, 20 aprovados e 2 opcionais
+  ignorados; build sob /posUtfpr/ + `yarn test:pages` exit 0, 3 aprovados;
+  actionlint 1.7.12 exit 0. Bootstrap fallback excluído como entrypoint, função
+  compartilhada medida e integração real testada; limites preservados.
+- **GitHub real:** Pages habilitado com build_type workflow, público/HTTPS.
+  [PR #1](https://github.com/LuisHVSilva/posUtfpr/pull/1) mesclado após
+  [CI verde](https://github.com/LuisHVSilva/posUtfpr/actions/runs/38017680803),
+  sem bypass administrativo. Commits iniciais `d9e4622` e `3cca4e0`; merge
+  `32601545d24a2c9714a33f745cbcbd5afb3dfb47`.
+  [CI/CD da main](https://github.com/LuisHVSilva/posUtfpr/actions/runs/38018159305)
+  concluiu quality e Pages com sucesso. Artefatos confirmados:
+  `folio-quality-reports` (11656588744) e `github-pages` (11656758711).
+- **Publicado e verificado:** https://luishvsilva.github.io/posUtfpr/.
+  `$env:FOLIO_PUBLISHED_URL = 'https://luishvsilva.github.io/posUtfpr/'; yarn test:published`
+  exit 0, 2 testes reais: artigo direto/reload com query/hash preservados;
+  admin direto → login real da DummyJSON → reload com sessão → logout → acesso
+  negado. Sem mocks na verificação pública e sem imprimir credenciais/tokens.
+  Resposta HTTP 404 do deep link foi confirmada antes da recuperação da aplicação;
+  flags legadas do endpoint Pages não foram usadas como prova do fallback.
+- **Main protegida:** API confirmou PR, check `Folio / qualidade` estrito,
+  enforce_admins true, force push/deletion false e resolução de conversas exigida.
+  Apenas proprietário listado como colaborador; required_approving_review_count 0.
+  Não houve aprovação humana inventada. Ao existir outro revisor, exigir uma
+  aprovação. Revisão humana de código/visual permanece pendente.
+- **Correções/limitações:** fontes Markdown originais usam dois espaços finais
+  como quebra; atributo whitespace ajustado apenas para Markdown, preservando
+  sintaxe e verificação de código. Avisos de bundle ~725 kB e anotações internas
+  do Zod continuam não bloqueantes. Cobertura de branches não é 100%.
+  Checkout original continua com alterações staged; sincronização deve preservar
+  esse trabalho. Próximo passo humano: revisar entrega/código e realizar entrega
+  acadêmica. Execução encerrada na F6 após evidências técnicas verificadas.
 
 ## 7. Referências técnicas para implementação
 

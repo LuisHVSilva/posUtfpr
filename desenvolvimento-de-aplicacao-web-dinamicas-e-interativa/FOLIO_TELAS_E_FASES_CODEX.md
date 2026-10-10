@@ -161,7 +161,7 @@ Cada fase contempla **UI + integração + testes aplicáveis**, não uma tela is
 | F3 · Telas/CRUD | Concluído | Home com destaque/busca/paginação, artigo/comentários, painel paginado e modal CRUD simulado; hooks, services/safeParse, feedback e testes | Somente F3 solicitada pelo usuário; revisão humana pendente | 09/10/2026: typecheck/build aprovados; Vitest/RTL 91/91; Chromium determinístico 10/10 e 2 reais ignorados; teste real de posts/contratos CRUD separado 1/1 aprovado; sem commit | Favoritos/GSAP na F4; cobertura na F5; CI/deploy na F6 |
 | F4 · Extras/visual | Concluído | Favoritos persistidos por IDs, contexto/hook com guarda, controles e seção única; tema Mantine, bento, foco/toque/contraste, GSAP único com redução de movimento/cleanup | Execução somente F4 autorizada; revisão humana pendente | 09/10/2026: typecheck/build aprovados; Vitest/RTL 109/109; Chromium 20/20 e 2 reais ignorados; 320/375/768/1280 px nos dois temas sem overflow; teclado e persistência conferidos | Cobertura integral na F5; CI/deploy na F6; revisão humana pendente |
 | F5 · Testes | Concluído | Testes complementares, cobertura V8 text/HTML/LCOV/JSON, check com barreira de cobertura, caminho de setup portátil e teclado JSDOM estabilizado; instalação nova validada | Somente F5 autorizada; revisão humana pendente | 09/10/2026: 119/119 em 12 arquivos; linhas/statements/funções 100%, branches 97,71%; yarn run check e build/typecheck aprovados; Chromium 20/20 e 2 reais ignorados; instalação congelada nova aprovada | Meta de branches 100% não atingida; CI/CD/Pages/branch remota na F6 |
-| F6 · CI/CD | Em validação remota | Workflow CI/CD, base/basename, fallback real, README/matriz, testes de deep links e configuração inicial de Pages | Somente F6 autorizada; revisão humana pendente | Local: typecheck/build, 129 testes, 20 E2E e 3 Pages aprovados; actionlint aprovado; repositório público e Pages Actions confirmados | Confirmar PR/CI/deploy, URL publicada e proteção main |
+| F6 · CI/CD | Concluído | Workflow CI/CD na raiz do monorepo, Pages público, base/basename/fallback, README/matriz, testes de deep links/site real e proteção main | Somente F6 autorizada; revisão humana pendente; nenhum revisor adicional disponível | 09/10/2026: typecheck/build/actionlint, 129 unitários/RTL, 20 E2E, 3 Pages e 2 publicados reais aprovados; cobertura 100% linhas/statements/funções e 97,84% branches; PR #1/CI/CD reais verdes; URL verificada | Aprovação humana não presumida; aprovações exigidas 0 até existir revisor; sincronizar checkout preservando staged |
 
 **Formato mínimo para cada registro de alteração:** `data | fase | decisão | arquivos | comando executado | resultado real | validação humana | próximo passo`.
 
@@ -240,3 +240,22 @@ No Yarn Classic, `yarn check` verifica dependências; o script completo do
 projeto é `yarn run check`, que agora inclui cobertura. Relatórios locais em
 `coverage/` e detalhes no [registro F5/E5](FOLIO_CODEX_IMPLEMENTACAO.md#registro-observado--09102026--f5e5).
 Nenhuma alegação de 100% de branches, CI verde, deploy ou configuração remota.
+
+**09/10/2026 | F6 |** Workflow na raiz real do monorepo, base /posUtfpr/,
+404 com entrypoint separado e restauração de rota/query/hash antes do Router |
+workflow, scripts/build/servidor estático, páginas/entrypoint de recuperação,
+configurações/tests Pages/publicação, README e diários |
+`yarn run check`, `yarn test:e2e`, build de Pages/`yarn test:pages`, actionlint,
+GitHub API/PR/CI/CD e `yarn test:published` |
+129 testes/13 arquivos; cobertura 100% linhas/statements/funções e 97,84%
+branches; 20 E2E, 3 Pages e 2 públicos reais aprovados; CI/CD remoto verde |
+revisão humana pendente | parar na F6, sem nova fase.
+
+Entrega pelo [PR #1](https://github.com/LuisHVSilva/posUtfpr/pull/1),
+[CI/CD confirmado](https://github.com/LuisHVSilva/posUtfpr/actions/runs/38018159305),
+[URL publicada](https://luishvsilva.github.io/posUtfpr/) e main protegida por
+PR/check estrito, inclusive administradores, sem force push/exclusão.
+Só o proprietário foi listado: nenhuma aprovação humana foi inventada;
+configurar uma aprovação quando existir revisor adicional. Publicação por clone
+isolado preservou o índice original. Detalhes no
+[registro F6/E6](FOLIO_CODEX_IMPLEMENTACAO.md#registro-observado--09102026--f6e6).
